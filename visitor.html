@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b1626">
+<title>Follow the Bee</title>
+<style>
+  :root {
+    --bg-top: #0b1626;
+    --bg-bottom: #13233a;
+    --text: #eef3f8;
+    --muted: rgba(238, 243, 248, 0.35);
+    --bee-size: min(15vmin, 140px);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-top);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* Visitors must not be able to scroll, zoom, select or open menus. */
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: radial-gradient(ellipse at 50% 55%, var(--bg-bottom) 0%, var(--bg-top) 75%);
+  }
+
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 16vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6vw;
+    text-align: center;
+    font-size: clamp(22px, 4.6vmin, 48px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+
+  #bee {
+    position: fixed;
+    left: 0; top: 0;
+    width: var(--bee-size);
+    height: var(--bee-size);
+    margin-left: calc(var(--bee-size) / -2);
+    margin-top: calc(var(--bee-size) / -2);
+    will-change: transform;
+    pointer-events: none;
+  }
+  #bee .glow {
+    position: absolute;
+    inset: -45%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 214, 90, 0.28) 0%, rgba(255, 214, 90, 0) 65%);
+  }
+  #bee svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transition: transform 0.6s ease;
+  }
+  #bee.face-left svg { transform: scaleX(-1); }
+
+  .wing {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: flap 0.22s ease-in-out infinite alternate;
+  }
+  .wing.back { animation-delay: -0.11s; }
+  @keyframes flap {
+    from { transform: rotate(-10deg) scaleY(1); }
+    to   { transform: rotate(8deg) scaleY(0.82); }
+  }
+
+  /* Presenter controls: small and quiet. */
+  #fs {
+    position: fixed;
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    width: 48px; height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  #fs svg { width: 24px; height: 24px; }
+  #sync {
+    position: fixed;
+    left: max(14px, env(safe-area-inset-left));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    font: 12px ui-monospace, Menlo, Consolas, monospace;
+    color: rgba(238, 243, 248, 0.18);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wing { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>Keep your head still. Follow the bee with your eyes only.</header>
+
+<div id="bee" aria-hidden="true">
+  <div class="glow"></div>
+  <svg viewBox="-50 -50 100 100">
+    <!-- wings -->
+    <ellipse class="wing back" cx="-6" cy="-27" rx="13" ry="18" fill="#d9f0ff" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1.5"/>
+    <ellipse class="wing" cx="8" cy="-29" rx="14" ry="19" fill="#e8f6ff" fill-opacity="0.7" stroke="#ffffff" stroke-opacity="0.8" stroke-width="1.5"/>
+    <!-- stinger -->
+    <path d="M-36 2 L-47 6 L-36 10 Z" fill="#3a2a12"/>
+    <!-- body -->
+    <ellipse cx="-4" cy="6" rx="33" ry="24" fill="#ffcf3f" stroke="#3a2a12" stroke-width="3"/>
+    <path d="M-17 -15 Q-21 6 -17 27" fill="none" stroke="#3a2a12" stroke-width="8" stroke-linecap="round"/>
+    <path d="M-2 -17 Q-6 6 -2 29" fill="none" stroke="#3a2a12" stroke-width="8" stroke-linecap="round"/>
+    <!-- head -->
+    <circle cx="27" cy="2" r="18" fill="#ffd95c" stroke="#3a2a12" stroke-width="3"/>
+    <!-- antennae -->
+    <path d="M30 -15 Q32 -28 40 -32" fill="none" stroke="#3a2a12" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="40" cy="-32" r="3.2" fill="#3a2a12"/>
+    <path d="M22 -15 Q20 -27 26 -34" fill="none" stroke="#3a2a12" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="26" cy="-34" r="3.2" fill="#3a2a12"/>
+    <!-- face -->
+    <circle cx="33" cy="-2" r="3.6" fill="#1d1408"/>
+    <circle cx="34.2" cy="-3.3" r="1.2" fill="#ffffff"/>
+    <circle cx="37" cy="7" r="3.2" fill="#ff9b8a" fill-opacity="0.75"/>
+    <path d="M26 8 Q31 13 36 9" fill="none" stroke="#1d1408" stroke-width="2.2" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<button id="fs" type="button" aria-label="Fullscreen" title="Fullscreen">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+  </svg>
+</button>
+<div id="sync"></div>
+
+<script src="hpath.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var bee = document.getElementById('bee');
+  var header = document.querySelector('header');
+  var sync = document.getElementById('sync');
+
+  // Movement area: everything below the instruction line.
+  var geo = {};
+  function measure() {
+    var w = window.innerWidth, h = window.innerHeight;
+    var top = header.getBoundingClientRect().bottom;
+    var beeSize = bee.offsetWidth;
+    var areaH = h - top;
+    geo.cx = w / 2;
+    geo.cy = top + areaH / 2;
+    geo.ax = Math.max(0, w / 2 - beeSize * 0.9 - 24);
+    geo.ay = Math.max(0, areaH / 2 - beeSize * 0.7 - 12);
+  }
+  window.addEventListener('resize', measure);
+  window.addEventListener('orientationchange', function () { setTimeout(measure, 300); });
+  measure();
+
+  var lastX = 0, facingLeft = false, lastSync = '';
+  function frame() {
+    var s = HPath.state(Date.now());
+    var px = geo.cx + s.x * geo.ax;
+    var py = geo.cy + s.y * geo.ay;
+    bee.style.transform = 'translate3d(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px,0)';
+
+    // Face the way we are flying horizontally.
+    var dx = s.x - lastX;
+    if (dx < -0.002 && !facingLeft) { facingLeft = true; bee.classList.add('face-left'); }
+    else if (dx > 0.002 && facingLeft) { facingLeft = false; bee.classList.remove('face-left'); }
+    lastX = s.x;
+
+    var label = (s.t / 1000).toFixed(1) + ' / 40 s';
+    if (label !== lastSync) { sync.textContent = label; lastSync = label; }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // --- No touching: swallow every gesture except the presenter button. ---
+  var fsBtn = document.getElementById('fs');
+  function block(e) {
+    if (e.target.closest && e.target.closest('#fs')) return;
+    e.preventDefault();
+  }
+  ['touchstart', 'touchmove', 'gesturestart', 'contextmenu', 'dblclick'].forEach(function (ev) {
+    document.addEventListener(ev, block, { passive: false });
+  });
+
+  // --- Fullscreen + keep screen awake (presenter). ---
+  var wakeLock = null;
+  function keepAwake() {
+    if (!('wakeLock' in navigator) || wakeLock) return;
+    navigator.wakeLock.request('screen').then(function (l) {
+      wakeLock = l;
+      l.addEventListener('release', function () { wakeLock = null; });
+    }).catch(function () {});
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') keepAwake();
+  });
+
+  function isFullscreen() {
+    return document.fullscreenElement || document.webkitFullscreenElement;
+  }
+  fsBtn.addEventListener('click', function () {
+    keepAwake();
+    var el = document.documentElement;
+    if (isFullscreen()) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else if (el.requestFullscreen) {
+      el.requestFullscreen().catch(function () {});
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    }
+  });
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) {
+    document.addEventListener(ev, function () { setTimeout(measure, 100); });
+  });
+})();
+</script>
+</body>
+</html>

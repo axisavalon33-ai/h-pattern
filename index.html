@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H-Pattern Exhibit</title>
+<style>
+  :root { --bg: #0b1626; --text: #eef3f8; --soft: rgba(238,243,248,0.7); --line: rgba(255,255,255,0.16); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; padding: 16px;
+    background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+  }
+  h1 { margin: 0; font-size: clamp(26px, 5vmin, 48px); text-align: center; }
+  p { margin: 0; color: var(--soft); text-align: center; font-size: clamp(16px, 2.6vmin, 22px); max-width: 760px; }
+  .choices { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  a {
+    display: block; width: min(360px, 100%); padding: 28px 24px; border-radius: 20px;
+    border: 1px solid var(--line); background: rgba(255,255,255,0.05);
+    color: var(--text); text-decoration: none; text-align: center;
+  }
+  a b { display: block; font-size: clamp(22px, 4vmin, 34px); margin-bottom: 8px; }
+  a span { color: var(--soft); font-size: 17px; }
+  #clock { font: 15px ui-monospace, Menlo, Consolas, monospace; color: var(--soft); }
+</style>
+</head>
+<body>
+  <h1>Cranial nerves III, IV &amp; VI — H pattern</h1>
+  <p>Pick what this tablet should be. Both tablets follow the same 40-second cycle from their own clocks, so set each tablet’s date &amp; time to automatic.</p>
+  <div class="choices">
+    <a href="visitor.html"><b>Visitor tablet</b><span>The bee to follow. No camera.</span></a>
+    <a href="audience.html"><b>Audience tablet</b><span>Live camera, H diagram and muscle captions.</span></a>
+  </div>
+  <div id="clock"></div>
+<script>
+  var c = document.getElementById('clock');
+  setInterval(function () {
+    c.textContent = 'Cycle position: ' + ((Date.now() % 40000) / 1000).toFixed(1) + ' / 40 s';
+  }, 100);
+</script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b1626">
+<title>Eye Muscles Live</title>
+<style>
+  :root {
+    --bg: #0b1626;
+    --panel: rgba(8, 16, 30, 0.78);
+    --line: rgba(255, 255, 255, 0.16);
+    --text: #f2f6fa;
+    --soft: rgba(242, 246, 250, 0.72);
+    --cn3: #7cc4ff;   /* oculomotor */
+    --cn4: #8ee6a8;   /* trochlear  */
+    --cn6: #ffb36b;   /* abducens   */
+    --bee: #ffcf3f;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ---------- Live camera ---------- */
+  #camWrap {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 40%, #16263e 0%, var(--bg) 75%);
+  }
+  #cam {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: 50% var(--focus-y, 40%);
+    transform: scaleX(-1) scale(var(--zoom, 1.8));
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  #cam.live { opacity: 1; }
+  #camMsg {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(80vw, 900px);
+    text-align: center;
+    font-size: clamp(18px, 3.4vmin, 34px);
+    color: var(--soft);
+    line-height: 1.35;
+  }
+
+  /* ---------- H diagram (top-left) ---------- */
+  #diagram {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    left: max(14px, env(safe-area-inset-left));
+    width: clamp(150px, 24vmin, 240px);
+    padding: 1.4vmin 1.4vmin 1vmin;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  #diagram svg { display: block; width: 100%; height: auto; }
+  #diagram .cap {
+    text-align: center;
+    font-size: clamp(13px, 2.2vmin, 20px);
+    color: var(--soft);
+    margin-top: 0.6vmin;
+  }
+  .hp { fill: rgba(255, 255, 255, 0.25); transition: fill 0.3s, r 0.3s; }
+  .hp.on { fill: var(--bee); }
+
+  /* ---------- Presenter controls (top-right) ---------- */
+  #controls {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    right: max(14px, env(safe-area-inset-right));
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  #controls button {
+    height: 48px;
+    min-width: 48px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    color: var(--soft);
+    font: 600 16px system-ui, -apple-system, sans-serif;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+  #controls button svg { width: 22px; height: 22px; }
+  #startCam { color: var(--text) !important; background: #1f6feb !important; border-color: #1f6feb !important; }
+  #startCam.hidden { display: none; }
+  .zoomBtn { font-size: 22px !important; }
+  .zoomBtn.hidden { display: none !important; }
+
+  /* ---------- Muscle caption ---------- */
+  #caption {
+    position: fixed;
+    left: 50%;
+    bottom: calc(13vh + 2vmin);
+    transform: translate(-50%, 12px);
+    width: min(94vw, 1500px);
+    padding: 2vmin 3vmin 2.4vmin;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+  #caption.show { opacity: 1; transform: translate(-50%, 0); }
+  #capTitle {
+    text-align: center;
+    font-size: clamp(24px, 5.6vmin, 60px);
+    font-weight: 700;
+    margin-bottom: 1.4vmin;
+  }
+  #capTitle .arrow { color: var(--bee); }
+  .eyes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5vmin;
+  }
+  .eye {
+    border-left: 6px solid var(--c, var(--cn3));
+    padding: 0.6vmin 0 0.6vmin 2vmin;
+  }
+  .eye .who {
+    font-size: clamp(13px, 2.3vmin, 22px);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--soft);
+  }
+  .eye .plain {
+    font-size: clamp(20px, 4.2vmin, 44px);
+    font-weight: 650;
+    line-height: 1.15;
+    margin: 0.4vmin 0 0.6vmin;
+  }
+  .eye .term {
+    font-size: clamp(16px, 3.1vmin, 32px);
+    color: var(--c, var(--cn3));
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .eye .nerve {
+    font-size: clamp(13px, 2.4vmin, 24px);
+    color: var(--soft);
+    margin-top: 0.3vmin;
+  }
+  .eye.cn3 { --c: var(--cn3); }
+  .eye.cn4 { --c: var(--cn4); }
+  .eye.cn6 { --c: var(--cn6); }
+
+  /* ---------- Memory rule (bottom) ---------- */
+  #rule {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 13vh;
+    padding: 0 4vw env(safe-area-inset-bottom);
+    background: rgba(5, 10, 20, 0.88);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3vw;
+    text-align: center;
+  }
+  #rule .big {
+    font-size: clamp(24px, 5.4vmin, 56px);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  #rule .lr6 { color: var(--cn6); }
+  #rule .so4 { color: var(--cn4); }
+  #rule .r3  { color: var(--cn3); }
+  #rule .key {
+    font-size: clamp(12px, 2.1vmin, 21px);
+    color: var(--soft);
+    text-align: left;
+    line-height: 1.35;
+  }
+
+  #sync {
+    position: fixed;
+    right: max(14px, env(safe-area-inset-right));
+    bottom: calc(13vh + 6px);
+    font: 12px ui-monospace, Menlo, Consolas, monospace;
+    color: rgba(242, 246, 250, 0.3);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="camWrap">
+  <video id="cam" autoplay playsinline muted></video>
+  <div id="camMsg">Presenter: tap <b>Start camera</b> (top right), then angle this tablet toward the visitor's face.</div>
+</div>
+
+<div id="diagram" aria-hidden="true">
+  <svg viewBox="-60 -60 120 120">
+    <g stroke="rgba(255,255,255,0.35)" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="-45" y1="-45" x2="-45" y2="45"/>
+      <line x1="45" y1="-45" x2="45" y2="45"/>
+      <line x1="-45" y1="0" x2="45" y2="0"/>
+    </g>
+    <circle class="hp" data-p="UL" cx="-45" cy="-45" r="5"/>
+    <circle class="hp" data-p="L"  cx="-45" cy="0"   r="5"/>
+    <circle class="hp" data-p="DL" cx="-45" cy="45"  r="5"/>
+    <circle class="hp" data-p="UR" cx="45"  cy="-45" r="5"/>
+    <circle class="hp" data-p="R"  cx="45"  cy="0"   r="5"/>
+    <circle class="hp" data-p="DR" cx="45"  cy="45"  r="5"/>
+    <circle cx="0" cy="0" r="3" fill="rgba(255,255,255,0.35)"/>
+    <circle id="dot" cx="0" cy="0" r="10" fill="#ffcf3f" stroke="#3a2a12" stroke-width="2.5"/>
+  </svg>
+  <div class="cap" id="diagCap">Centre</div>
+</div>
+
+<div id="controls">
+  <button id="startCam" type="button">Start camera</button>
+  <button class="zoomBtn hidden" id="zoomOut" type="button" aria-label="Zoom out">−</button>
+  <button class="zoomBtn hidden" id="zoomIn" type="button" aria-label="Zoom in">+</button>
+  <button id="fs" type="button" aria-label="Fullscreen" title="Fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+    </svg>
+  </button>
+</div>
+
+<div id="caption" aria-live="polite">
+  <div id="capTitle"></div>
+  <div class="eyes">
+    <!-- Mirrored camera: the visitor's LEFT eye appears on the LEFT of the screen. -->
+    <div class="eye" id="eyeL">
+      <div class="who">Left eye</div>
+      <div class="plain"></div>
+      <div class="term"></div>
+      <div class="nerve"></div>
+    </div>
+    <div class="eye" id="eyeR">
+      <div class="who">Right eye</div>
+      <div class="plain"></div>
+      <div class="term"></div>
+      <div class="nerve"></div>
+    </div>
+  </div>
+</div>
+
+<div id="rule">
+  <div class="big"><span class="lr6">LR6</span> <span class="so4">SO4</span>, <span class="r3">the rest are 3</span></div>
+  <div class="key">
+    <span class="lr6">Lateral Rectus</span> → nerve 6 (abducens)<br>
+    <span class="so4">Superior Oblique</span> → nerve 4 (trochlear)<br>
+    <span class="r3">All the others</span> → nerve 3 (oculomotor)
+  </div>
+</div>
+
+<div id="sync"></div>
+
+<script src="hpath.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ---------- Which muscles do the work at each end point ----------
+  // "Right" and "left" are always the VISITOR's right and left.
+  var NERVES = {
+    3: 'Cranial nerve III · oculomotor',
+    4: 'Cranial nerve IV · trochlear',
+    6: 'Cranial nerve VI · abducens'
+  };
+  var POSES = {
+    R: {
+      title: 'Looking right',
+      arrow: '→',
+      R: { plain: 'Outer muscle pulls the eye outward', term: 'Right lateral rectus', cn: 6 },
+      L: { plain: 'Inner muscle pulls the eye toward the nose', term: 'Left medial rectus', cn: 3 }
+    },
+    UR: {
+      title: 'Looking up and right',
+      arrow: '↗',
+      R: { plain: 'Top muscle lifts the eye', term: 'Right superior rectus', cn: 3 },
+      L: { plain: 'Lower slanted muscle lifts the eye', term: 'Left inferior oblique', cn: 3 }
+    },
+    DR: {
+      title: 'Looking down and right',
+      arrow: '↘',
+      R: { plain: 'Bottom muscle lowers the eye', term: 'Right inferior rectus', cn: 3 },
+      L: { plain: 'Upper slanted muscle lowers the eye', term: 'Left superior oblique', cn: 4 }
+    },
+    L: {
+      title: 'Looking left',
+      arrow: '←',
+      L: { plain: 'Outer muscle pulls the eye outward', term: 'Left lateral rectus', cn: 6 },
+      R: { plain: 'Inner muscle pulls the eye toward the nose', term: 'Right medial rectus', cn: 3 }
+    },
+    UL: {
+      title: 'Looking up and left',
+      arrow: '↖',
+      L: { plain: 'Top muscle lifts the eye', term: 'Left superior rectus', cn: 3 },
+      R: { plain: 'Lower slanted muscle lifts the eye', term: 'Right inferior oblique', cn: 3 }
+    },
+    DL: {
+      title: 'Looking down and left',
+      arrow: '↙',
+      L: { plain: 'Bottom muscle lowers the eye', term: 'Left inferior rectus', cn: 3 },
+      R: { plain: 'Upper slanted muscle lowers the eye', term: 'Right superior oblique', cn: 4 }
+    }
+  };
+  var DIAG_NAMES = {
+    R: 'Right', UR: 'Up-right', DR: 'Down-right',
+    L: 'Left', UL: 'Up-left', DL: 'Down-left', C: 'Centre'
+  };
+
+  // Show the caption a little before arrival and keep it a little after
+  // leaving, so the audience has time to read it.
+  var LEAD_MS = 1200;
+  var LINGER_MS = 1000;
+
+  var caption = document.getElementById('caption');
+  var capTitle = document.getElementById('capTitle');
+  var eyeEls = { L: document.getElementById('eyeL'), R: document.getElementById('eyeR') };
+  var dot = document.getElementById('dot');
+  var diagCap = document.getElementById('diagCap');
+  var hp = {};
+  Array.prototype.forEach.call(document.querySelectorAll('.hp'), function (c) {
+    hp[c.getAttribute('data-p')] = c;
+  });
+  var sync = document.getElementById('sync');
+
+  function fillEye(el, d) {
+    el.className = 'eye cn' + d.cn;
+    el.querySelector('.plain').textContent = d.plain;
+    el.querySelector('.term').textContent = d.term;
+    el.querySelector('.nerve').textContent = NERVES[d.cn];
+  }
+
+  var shownPose = null, litPose = null, diagText = '', lastSync = '';
+
+  function captionPoseFor(s) {
+    if (s.kind === 'hold') return s.pose;
+    if (s.prevHold && s.sinceStart < LINGER_MS) return s.prevHold;
+    if (s.to !== 'C' && s.untilEnd < LEAD_MS) return s.to;
+    return null;
+  }
+
+  function frame() {
+    var s = HPath.state(Date.now());
+
+    // Dot in the H diagram (same normalised coordinates as the bee).
+    dot.setAttribute('cx', (s.x * 45).toFixed(2));
+    dot.setAttribute('cy', (s.y * 45).toFixed(2));
+
+    var lit = s.kind === 'hold' ? s.pose : null;
+    if (lit !== litPose) {
+      if (litPose) hp[litPose].classList.remove('on');
+      if (lit) hp[lit].classList.add('on');
+      litPose = lit;
+    }
+    var dt = s.kind === 'hold' ? DIAG_NAMES[s.pose] : 'Moving to ' + DIAG_NAMES[s.to].toLowerCase();
+    if (dt !== diagText) { diagCap.textContent = dt; diagText = dt; }
+
+    // Caption.
+    var cp = captionPoseFor(s);
+    if (cp !== shownPose) {
+      if (cp) {
+        var d = POSES[cp];
+        capTitle.innerHTML = '<span class="arrow">' + d.arrow + '</span> ' + d.title;
+        fillEye(eyeEls.L, d.L);
+        fillEye(eyeEls.R, d.R);
+        caption.classList.add('show');
+      } else {
+        caption.classList.remove('show');
+      }
+      shownPose = cp;
+    }
+
+    var label = (s.t / 1000).toFixed(1) + ' / 40 s';
+    if (label !== lastSync) { sync.textContent = label; lastSync = label; }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ---------- Camera ----------
+  var video = document.getElementById('cam');
+  var camMsg = document.getElementById('camMsg');
+  var startBtn = document.getElementById('startCam');
+  var zoomIn = document.getElementById('zoomIn');
+  var zoomOut = document.getElementById('zoomOut');
+  var zoom = 1.8;
+
+  function applyZoom() {
+    video.style.setProperty('--zoom', zoom.toFixed(2));
+  }
+  applyZoom();
+  zoomIn.addEventListener('click', function () { zoom = Math.min(4, zoom + 0.2); applyZoom(); });
+  zoomOut.addEventListener('click', function () { zoom = Math.max(1, zoom - 0.2); applyZoom(); });
+
+  startBtn.addEventListener('click', function () {
+    keepAwake();
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      camMsg.textContent = 'This browser cannot use the camera here. Open the page over https:// (not as a local file) in Safari or Chrome.';
+      return;
+    }
+    camMsg.textContent = 'Starting camera…';
+    navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        facingMode: 'user',
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
+      }
+    }).then(function (stream) {
+      video.srcObject = stream;
+      return video.play();
+    }).then(function () {
+      video.classList.add('live');
+      camMsg.style.display = 'none';
+      startBtn.classList.add('hidden');
+      zoomIn.classList.remove('hidden');
+      zoomOut.classList.remove('hidden');
+    }).catch(function (err) {
+      camMsg.textContent = 'Camera could not start (' + (err && err.name ? err.name : 'error') +
+        '). Check that camera access is allowed for this site, then tap Start camera again.';
+    });
+  });
+
+  // ---------- Fullscreen + keep screen awake ----------
+  var wakeLock = null;
+  function keepAwake() {
+    if (!('wakeLock' in navigator) || wakeLock) return;
+    navigator.wakeLock.request('screen').then(function (l) {
+      wakeLock = l;
+      l.addEventListener('release', function () { wakeLock = null; });
+    }).catch(function () {});
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') keepAwake();
+  });
+
+  document.getElementById('fs').addEventListener('click', function () {
+    keepAwake();
+    var el = document.documentElement;
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else if (el.requestFullscreen) {
+      el.requestFullscreen().catch(function () {});
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    }
+  });
+
+  ['gesturestart', 'contextmenu', 'dblclick'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+  });
+})();
+</script>
+</body>
+</html>
