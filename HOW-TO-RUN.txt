@@ -1,0 +1,113 @@
+MEDSCOPE II - EXHIBITION SCREEN
+How to run it on exhibition day
+===============================================================
+
+WHAT YOU NEED
+  - A laptop (Windows or Mac) with this folder on it.
+  - Python installed on the laptop (free: https://www.python.org/downloads/
+    On Windows, tick "Add Python to PATH" when installing).
+  - The Smart TV and the laptop on the SAME Wi-Fi network.
+
+CHECK THE FOLDER LOOKS LIKE THIS
+  index.html
+  start-tv.bat           (Windows)
+  start-tv.sh            (Mac / Linux)
+  fonts\                 (font files - do not delete)
+  images\background.jpg
+  videos\menu.mp4
+  videos\01.mp4 ... videos\12.mp4
+
+  Video names must be exactly 01.mp4, 02.mp4 ... (two digits, small
+  letters ".mp4"). If a video is missing, the screen still works and
+  shows a colourful card with the slide number and title instead.
+  Videos should be normal MP4 files (H.264). Most video tools save
+  this by default.
+
+
+---------------------------------------------------------------
+STEP 1 - START IT ON THE LAPTOP
+---------------------------------------------------------------
+  WINDOWS: double-click  start-tv.bat
+           (If Windows asks about the firewall, click "Allow access".)
+
+  MAC:     open Terminal, type  sh  and a space, drag start-tv.sh into
+           the Terminal window, press Enter.
+
+  A black window opens and shows a line like:
+
+        Type this on the TV:  http://192.168.1.25:8000
+
+  Write that address down. KEEP THIS WINDOW OPEN all day.
+  (If Windows shows more than one address, try the one that starts
+  with 192.168. first.)
+
+
+---------------------------------------------------------------
+STEP 2 - TEST ON THE LAPTOP FIRST
+---------------------------------------------------------------
+  Open Chrome on the laptop and go to:   http://localhost:8000
+  Press F11 for full screen. You should see the menu video and the
+  three language tiles. Use the arrow keys and Enter to try it.
+
+
+---------------------------------------------------------------
+STEP 3 - OPEN IT ON THE SMART TV
+---------------------------------------------------------------
+  1. On the TV remote, open the "Internet" / "Web Browser" app.
+  2. Type the address from Step 1, for example
+        http://192.168.1.25:8000
+  3. Make the browser full screen (usually in the browser menu).
+  4. In the TV settings, turn OFF: screen saver, "Eco" / power saving,
+     "Auto power off" and "No signal standby". The page asks the
+     screen to stay awake, but many TVs ignore that, so this is
+     important.
+
+  NO WI-FI? Copy the whole folder onto the laptop, connect the laptop
+  to the TV with an HDMI cable instead, and use Step 2 (localhost) on
+  the laptop in full screen.
+
+
+---------------------------------------------------------------
+USING THE REMOTE
+---------------------------------------------------------------
+  MENU
+    Left / Right ......... move between English, Tamil, Sinhala
+    OK / Enter ........... start in that language
+  SLIDES
+    Left / Right ......... previous / next slide
+    BACK (or Esc) ........ return to the language menu
+
+  The slides play by themselves. After the last slide the screen
+  goes back to the language menu and waits for the next visitor.
+
+
+---------------------------------------------------------------
+CHANGING THE WORDS
+---------------------------------------------------------------
+  Open index.html with Notepad (right-click > Open with > Notepad).
+  All the words are near the top, in the sections called  UI  and
+  SLIDES. Change only the text between the "quote marks". Save, then
+  press refresh on the TV browser.
+
+  !!! IMPORTANT !!!
+  The Tamil and Sinhala translations were made by a computer.
+  Please ask a native Tamil speaker and a native Sinhala speaker to
+  read every line BEFORE the exhibition and correct it in index.html.
+
+  Timing: in the SETTINGS section, "sentenceSeconds: 6.5" is how long
+  each subtitle stays on screen.
+
+  If the TV is slow or the videos stutter: in SETTINGS change
+  "sideCardVideos: true" to "sideCardVideos: false". Then only the big
+  centre video is played and the small side cards show colour cards.
+
+
+---------------------------------------------------------------
+IF SOMETHING GOES WRONG
+---------------------------------------------------------------
+  TV says "can't connect"  -> Is the black window still open on the
+                              laptop? Same Wi-Fi? Try the other address.
+                              Allow Python through the Windows firewall.
+  Videos black / missing   -> Check the file names in the videos folder.
+  Everything stuck         -> Press refresh in the TV browser.
+  To stop at the end       -> Close the black window on the laptop.

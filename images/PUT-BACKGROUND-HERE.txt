@@ -1,0 +1,1 @@
+Put background.jpg in this folder.

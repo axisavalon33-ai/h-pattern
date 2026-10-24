@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MEDSCOPE II – Neurosurgery &amp; Neuroscience</title>
+<style>
+/* ===================== FONTS (stored in ./fonts, works offline) ===================== */
+@font-face { font-family: "Oswald"; font-weight: 500; font-display: block;
+  src: url("fonts/oswald-latin-500-normal.woff2") format("woff2"), url("fonts/oswald-latin-500-normal.woff") format("woff"); }
+@font-face { font-family: "Oswald"; font-weight: 700; font-display: block;
+  src: url("fonts/oswald-latin-700-normal.woff2") format("woff2"), url("fonts/oswald-latin-700-normal.woff") format("woff"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-weight: 400; font-display: block;
+  src: url("fonts/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2"), url("fonts/atkinson-hyperlegible-latin-400-normal.woff") format("woff"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-weight: 700; font-display: block;
+  src: url("fonts/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2"), url("fonts/atkinson-hyperlegible-latin-700-normal.woff") format("woff"); }
+@font-face { font-family: "Noto Sans Tamil"; font-weight: 500; font-display: block;
+  src: url("fonts/noto-sans-tamil-tamil-500-normal.woff2") format("woff2"), url("fonts/noto-sans-tamil-tamil-500-normal.woff") format("woff"); }
+@font-face { font-family: "Noto Sans Tamil"; font-weight: 700; font-display: block;
+  src: url("fonts/noto-sans-tamil-tamil-700-normal.woff2") format("woff2"), url("fonts/noto-sans-tamil-tamil-700-normal.woff") format("woff"); }
+@font-face { font-family: "Noto Sans Sinhala"; font-weight: 500; font-display: block;
+  src: url("fonts/noto-sans-sinhala-sinhala-500-normal.woff2") format("woff2"), url("fonts/noto-sans-sinhala-sinhala-500-normal.woff") format("woff"); }
+@font-face { font-family: "Noto Sans Sinhala"; font-weight: 700; font-display: block;
+  src: url("fonts/noto-sans-sinhala-sinhala-700-normal.woff2") format("woff2"), url("fonts/noto-sans-sinhala-sinhala-700-normal.woff") format("woff"); }
+
+/* ===================== BASE ===================== */
+html, body {
+  margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+  background: #05060f; color: #fff;
+  font-family: "Atkinson Hyperlegible", "Noto Sans Tamil", "Noto Sans Sinhala", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none; user-select: none;
+}
+body.hide-cursor, body.hide-cursor * { cursor: none !important; }
+.screen {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0; visibility: hidden;
+  -webkit-transition: opacity 0.8s ease, visibility 0s linear 0.8s;
+  transition: opacity 0.8s ease, visibility 0s linear 0.8s;
+}
+.screen.active {
+  opacity: 1; visibility: visible;
+  -webkit-transition: opacity 0.8s ease, visibility 0s linear 0s;
+  transition: opacity 0.8s ease, visibility 0s linear 0s;
+}
+
+/* ===================== SCREEN 1: LANGUAGE MENU ===================== */
+#menu { background: radial-gradient(ellipse at 30% 50%, #1a1f4a 0%, #05060f 70%); }
+#menuVideo {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover; background: transparent;
+}
+#langBox {
+  position: absolute; right: 4vw; bottom: 7vh;
+  text-align: right;
+}
+#chooseText {
+  margin: 0 0 2.4vh 0;
+  font-weight: 700; line-height: 1.35;
+  text-shadow: 0 0.2vw 0.8vw rgba(0,0,0,0.9);
+}
+#chooseText div { font-size: 1.55vw; }
+#chooseText div.ta, #chooseText div.si { font-size: 1.35vw; }
+#tiles { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: end; -webkit-justify-content: flex-end; justify-content: flex-end; }
+.tile {
+  width: 13vw; height: 9.5vw; margin-left: 1.6vw;
+  border-radius: 1.4vw;
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+  font-weight: 700; font-size: 2.6vw; color: #fff;
+  text-shadow: 0 0.15vw 0.4vw rgba(0,0,0,0.45);
+  border: 0.25vw solid rgba(255,255,255,0.25);
+  box-shadow: 0 1vw 2.5vw rgba(0,0,0,0.55);
+  opacity: 0.88;
+  cursor: pointer;
+  -webkit-transform: scale(1); transform: scale(1);
+  -webkit-transition: -webkit-transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+}
+.tile:first-child { margin-left: 0; }
+.tile.en { background: linear-gradient(135deg, #2ee6ff 0%, #1d7bff 55%, #2a3bff 100%); font-family: "Oswald", sans-serif; font-weight: 500; font-size: 2.5vw; letter-spacing: 0.05em; }
+.tile.ta { background: linear-gradient(135deg, #ffb31a 0%, #ff6a3d 50%, #ff2d78 100%); font-family: "Noto Sans Tamil", sans-serif; }
+.tile.si { background: linear-gradient(135deg, #ff5fcf 0%, #c43dff 55%, #6a2cff 100%); font-family: "Noto Sans Sinhala", sans-serif; }
+.tile.selected {
+  opacity: 1; border-color: #fff;
+  -webkit-transform: scale(1.14); transform: scale(1.14);
+  box-shadow: 0 0 0 0.25vw rgba(255,255,255,0.55), 0 0 2.5vw rgba(255,255,255,0.85), 0 1vw 3vw rgba(0,0,0,0.6);
+}
+
+/* ===================== SCREEN 2: SLIDES ===================== */
+#slides {
+  background: #070914 url("images/background.jpg") center center / cover no-repeat;
+}
+#tint {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(3,4,12,0.55) 0%, rgba(3,4,12,0.35) 45%, rgba(3,4,12,0.7) 100%);
+}
+#header {
+  position: absolute; top: 0; left: 0; width: 100%; height: 8vh;
+  text-align: center; line-height: 8vh;
+  font-family: "Oswald", "Noto Sans Tamil", "Noto Sans Sinhala", sans-serif;
+  font-weight: 700; font-size: 4.2vh; letter-spacing: 0.12em; text-transform: uppercase;
+  white-space: nowrap;
+}
+html[lang="ta"] #header, html[lang="si"] #header { letter-spacing: 0.02em; font-size: 3.8vh; }
+#header span {
+  background: linear-gradient(90deg, #2ee6ff 0%, #8b5cff 35%, #ff3db8 68%, #ffb400 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+#stage {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  -webkit-perspective: 1800px; perspective: 1800px;
+  -webkit-perspective-origin: 50% 45%; perspective-origin: 50% 45%;
+}
+.card {
+  position: absolute; left: 50%; top: 0;
+  border-radius: 1.1vw; overflow: hidden;
+  background: #000;
+  border: 0.22vw solid rgba(255,255,255,0.18);
+  -webkit-box-sizing: border-box; box-sizing: border-box;
+  -webkit-transition: -webkit-transform 1s cubic-bezier(.4,.1,.2,1), opacity 1s ease, box-shadow 1s ease, border-color 1s ease;
+  transition: transform 1s cubic-bezier(.4,.1,.2,1), opacity 1s ease, box-shadow 1s ease, border-color 1s ease;
+  -webkit-box-reflect: below 1.4vh -webkit-linear-gradient(top, rgba(255,255,255,0) 72%, rgba(255,255,255,0.22) 100%);
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+}
+.card video {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover; background: #000;
+  opacity: 0; -webkit-transition: opacity 0.4s ease; transition: opacity 0.4s ease;
+}
+.card.ready video { opacity: 1; }
+.card.missing video { display: none; }
+.fallback {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  padding-top: 6%; -webkit-box-sizing: border-box; box-sizing: border-box;
+  text-align: center;   /* number + title sit in the top half, above the subtitles */
+}
+.fallback .num {
+  font-family: "Oswald", sans-serif; font-weight: 700;
+  font-size: 11em; line-height: 1.05; color: rgba(255,255,255,0.92);
+  text-shadow: 0 0.05em 0.2em rgba(0,0,0,0.35);
+}
+.fallback .ftitle {
+  margin-top: 0.3em; padding: 0 8%;
+  font-weight: 700; font-size: 3.2em; line-height: 1.25;
+  text-shadow: 0 0.08em 0.3em rgba(0,0,0,0.4);
+}
+.dim {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: #02030a; opacity: 0;
+  -webkit-transition: opacity 1s ease; transition: opacity 1s ease;
+}
+.card.center.tagN { border-color: #2ee6ff; box-shadow: 0 0 1.2vw rgba(46,230,255,0.9), 0 0 4vw rgba(46,230,255,0.45), 0 2vw 4vw rgba(0,0,0,0.6); }
+.card.center.tagD { border-color: #ff3db8; box-shadow: 0 0 1.2vw rgba(255,61,184,0.9), 0 0 4vw rgba(255,61,184,0.45), 0 2vw 4vw rgba(0,0,0,0.6); }
+
+/* ----- Subtitle overlay: sits exactly on top of the centre card ----- */
+#subs {
+  position: absolute; left: 0; top: 0;
+  border-radius: 1.1vw; overflow: hidden;
+  pointer-events: none; z-index: 50;
+}
+#band {
+  position: absolute; left: 0; bottom: 0; width: 100%;
+  padding: 7em 3.2em 1.6em 3.2em;
+  -webkit-box-sizing: border-box; box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.86) 100%);
+  opacity: 0; -webkit-transition: opacity 0.5s ease; transition: opacity 0.5s ease;
+}
+#band.show { opacity: 1; }
+#line1 { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; margin-bottom: 0.9em; }
+#tag {
+  -webkit-flex-shrink: 0; flex-shrink: 0;
+  padding: 0.35em 1em; margin-right: 1em;
+  border-radius: 2em;
+  font-weight: 700; font-size: 1.85em; line-height: 1.2; color: #fff;
+  white-space: nowrap;
+}
+#tag.tagN { background: linear-gradient(90deg, #12c8ff, #2a6bff); box-shadow: 0 0 1em rgba(46,230,255,0.55); }
+#tag.tagD { background: linear-gradient(90deg, #ff3db8, #a23dff); box-shadow: 0 0 1em rgba(255,61,184,0.55); }
+#stitle {
+  font-family: "Oswald", "Noto Sans Tamil", "Noto Sans Sinhala", sans-serif;
+  font-weight: 500; font-size: 2.6em; line-height: 1.25; color: #e8f3ff;
+  text-shadow: 0 0.06em 0.25em rgba(0,0,0,0.8);
+}
+#sentenceBox { position: relative; }
+#sentence {
+  font-weight: 700; line-height: 1.32; color: #fff;
+  text-shadow: 0 0.06em 0.12em rgba(0,0,0,0.95), 0 0 0.6em rgba(0,0,0,0.7);
+  opacity: 0; -webkit-transition: opacity 0.5s ease; transition: opacity 0.5s ease;
+}
+#sentence.show { opacity: 1; }
+#line3 {
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  margin-top: 1.1em;
+  font-size: 1.5em; color: rgba(255,255,255,0.78);
+}
+#source { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#counter { margin-left: 1.5em; font-family: "Oswald", sans-serif; font-weight: 500; font-size: 1.25em; color: #fff; letter-spacing: 0.06em; }
+#progress { margin-top: 0.8em; height: 0.35em; border-radius: 0.2em; background: rgba(255,255,255,0.16); overflow: hidden; }
+#bar { height: 100%; width: 0; background: linear-gradient(90deg, #2ee6ff, #8b5cff, #ff3db8, #ffb400); }
+
+/* ----- Numbered pager ----- */
+#pager {
+  position: absolute; left: 0; bottom: 2.6vh; width: 100%;
+  text-align: center; white-space: nowrap;
+  font-family: "Oswald", sans-serif; font-weight: 500;
+}
+#pager span {
+  display: inline-block; vertical-align: middle;
+  min-width: 4.4vh; height: 4.4vh; line-height: 4.4vh;
+  margin: 0 0.35vw; padding: 0 0.6vh;
+  border-radius: 2.4vh;
+  font-size: 2.3vh; color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.08);
+  cursor: pointer;
+  -webkit-transition: all 0.4s ease; transition: all 0.4s ease;
+}
+#pager span.arrow { background: transparent; font-size: 2.6vh; color: rgba(255,255,255,0.85); }
+#pager span.current {
+  color: #fff; font-weight: 700; font-size: 2.7vh; min-width: 6vh;
+  background: linear-gradient(90deg, #2ee6ff, #8b5cff, #ff3db8, #ffb400);
+  box-shadow: 0 0 1.4vh rgba(139,92,255,0.8);
+}
+</style>
+</head>
+<body class="hide-cursor">
+
+<!-- SCREEN 1: language menu -->
+<div id="menu" class="screen active">
+  <video id="menuVideo" src="videos/menu.mp4" autoplay muted loop playsinline preload="auto"></video>
+  <div id="langBox">
+    <div id="chooseText"></div>
+    <div id="tiles"></div>
+  </div>
+</div>
+
+<!-- SCREEN 2: slide carousel -->
+<div id="slides" class="screen">
+  <div id="tint"></div>
+  <div id="header"><span id="headerText"></span></div>
+  <div id="stage"></div>
+  <div id="subs">
+    <div id="band">
+      <div id="line1"><span id="tag"></span><span id="stitle"></span></div>
+      <div id="sentenceBox"><div id="sentence"></div></div>
+      <div id="line3"><span id="source"></span><span id="counter"></span></div>
+      <div id="progress"><div id="bar"></div></div>
+    </div>
+  </div>
+  <div id="pager"></div>
+</div>
+
+<script>
+/* =====================================================================
+   ALL TEXT IS HERE  –  edit wording in this section only.
+   ---------------------------------------------------------------------
+   IMPORTANT: The Tamil (ta) and Sinhala (si) translations were written
+   by a computer. Please ask a NATIVE SPEAKER of each language to check
+   every line before the exhibition, and correct it here.
+
+   To add a slide: copy one { ... } block in SLIDES, change the text,
+   and put its video in the videos folder. Numbering and the pager
+   update automatically.
+   tag: "N" = Neurosurgery (cyan),  "D" = New discovery (magenta)
+   ===================================================================== */
+
+var UI = {
+  en: { tile: "English", choose: "Choose your language",
+        header: "Neurosurgery & Neuroscience",
+        N: "Neurosurgery", D: "New discovery" },
+  ta: { tile: "தமிழ்", choose: "உங்கள் மொழியைத் தெரிவுசெய்யுங்கள்",
+        header: "நரம்பியல் சத்திரசிகிச்சை & நரம்பியல் விஞ்ஞானம்",
+        N: "நரம்பியல் சத்திரசிகிச்சை", D: "புதிய கண்டுபிடிப்பு" },
+  si: { tile: "සිංහල", choose: "ඔබේ භාෂාව තෝරන්න",
+        header: "ස්නායු ශල්‍යකර්ම සහ ස්නායු විද්‍යාව",
+        N: "ස්නායු ශල්‍යකර්ම", D: "නව සොයාගැනීම" }
+};
+
+var SLIDES = [
+  { video: "videos/01.mp4", tag: "N", source: "General neurosurgical practice",
+    en: { title: "What does a neurosurgeon do?", lines: [
+      "Neurosurgeons operate on the brain, the spinal cord and the nerves of the body.",
+      "They treat tumours, head and spine injuries, bleeding in the brain and trapped nerves.",
+      "Many operations now use microscopes, small openings and computer navigation." ] },
+    ta: { title: "நரம்பியல் சத்திரசிகிச்சை நிபுணர் என்ன செய்கிறார்?", lines: [
+      "நரம்பியல் சத்திரசிகிச்சை நிபுணர்கள் மூளை, முண்ணாண் மற்றும் உடலின் நரம்புகளில் சத்திரசிகிச்சை செய்கிறார்கள்.",
+      "கட்டிகள், தலை மற்றும் முதுகெலும்புக் காயங்கள், மூளையில் இரத்தக்கசிவு, அழுத்தப்பட்ட நரம்புகளுக்கு அவர்கள் சிகிச்சை அளிக்கிறார்கள்.",
+      "இன்று பல சத்திரசிகிச்சைகளில் நுணுக்குக்காட்டி, சிறிய துவாரங்கள், கணினி வழிகாட்டல் ஆகியவை பயன்படுத்தப்படுகின்றன." ] },
+    si: { title: "ස්නායු ශල්‍ය වෛද්‍යවරයෙක් කරන්නේ කුමක්ද?", lines: [
+      "ස්නායු ශල්‍ය වෛද්‍යවරුන් මොළයේ, සුෂුම්නාවේ සහ ශරීරයේ ස්නායුවල ශල්‍යකර්ම කරයි.",
+      "ඔවුන් ගෙඩි, හිසේ සහ කොඳු ඇට පෙළේ තුවාල, මොළයේ ලේ ගැලීම් සහ හිරවූ ස්නායු සඳහා ප්‍රතිකාර කරයි.",
+      "අද බොහෝ ශල්‍යකර්ම සඳහා අන්වීක්ෂ, කුඩා සිදුරු සහ පරිගණක මඟපෙන්වීම භාවිත කෙරේ." ] } },
+
+  { video: "videos/02.mp4", tag: "D", source: "Nobel Prize in Physiology or Medicine 2026",
+    en: { title: "Switching brain cells on and off with light", lines: [
+      "The 2026 Nobel Prize in Medicine was awarded for optogenetics.",
+      "A light-sensitive protein from a tiny green alga is placed into nerve cells.",
+      "A flash of light can then switch chosen neurons on or off, showing what each circuit does." ] },
+    ta: { title: "ஒளியால் மூளைக் கலங்களை இயக்குதலும் நிறுத்துதலும்", lines: [
+      "2026 மருத்துவ நோபல் பரிசு, ஒளியால் கலங்களைக் கட்டுப்படுத்தும் ஒப்டோஜெனெட்டிக்ஸ் ஆய்வுக்கு வழங்கப்பட்டது.",
+      "ஒரு சிறிய பச்சைப் பாசியிலிருந்து பெறப்பட்ட, ஒளியை உணரும் புரதம் நரம்புக் கலங்களுக்குள் செலுத்தப்படுகிறது.",
+      "ஒளிக்கீற்று மூலம் தெரிவுசெய்த நரம்புக் கலங்களை இயக்கவோ நிறுத்தவோ முடியும்; இதனால் ஒவ்வொரு சுற்றின் வேலையும் தெரிகிறது." ] },
+    si: { title: "ආලෝකයෙන් මොළයේ සෛල ක්‍රියාත්මක කිරීම සහ නැවැත්වීම", lines: [
+      "2026 වෛද්‍ය විද්‍යාව සඳහා වූ නොබෙල් ත්‍යාගය ඔප්ටොජෙනටික්ස් (ආලෝකයෙන් සෛල පාලනය) සඳහා පිරිනැමිණි.",
+      "කුඩා කොළ පැහැති ඇල්ගාවකින් ලබාගත් ආලෝකයට සංවේදී ප්‍රෝටීනයක් ස්නායු සෛල තුළට ඇතුළු කෙරේ.",
+      "ඉන්පසු ආලෝක දැල්වීමකින් තෝරාගත් ස්නායු සෛල ක්‍රියාත්මක කිරීමට හෝ නැවැත්වීමට හැකි අතර, එක් එක් පරිපථය කරන්නේ කුමක්දැයි එයින් පෙනේ." ] } },
+
+  { video: "videos/03.mp4", tag: "N", source: "Standard neurosurgical practice",
+    en: { title: "Awake brain surgery", lines: [
+      "The brain itself has no pain receptors, so it cannot feel the surgeon's touch.",
+      "With the scalp numbed, some patients stay awake and talk during the operation.",
+      "This helps surgeons protect the areas for speech and movement while removing a tumour." ] },
+    ta: { title: "விழித்திருக்கும் நிலையில் மூளைச் சத்திரசிகிச்சை", lines: [
+      "மூளைக்கு வலியை உணரும் நரம்பு முனைகள் இல்லை; எனவே சத்திரசிகிச்சை நிபுணரின் தொடுகையை அது உணர்வதில்லை.",
+      "தலைத்தோல் விறைக்கச் செய்யப்பட்ட பின், சில நோயாளிகள் சத்திரசிகிச்சையின் போது விழித்திருந்து பேசுகிறார்கள்.",
+      "கட்டியை அகற்றும்போது பேச்சு மற்றும் அசைவுக்கான மூளைப் பகுதிகளைப் பாதுகாக்க இது உதவுகிறது." ] },
+    si: { title: "අවදියෙන් සිටියදී මොළයේ ශල්‍යකර්ම", lines: [
+      "මොළයේ වේදනාව දැනෙන ප්‍රතිග්‍රාහක නැති නිසා, ශල්‍ය වෛද්‍යවරයාගේ ස්පර්ශය මොළයට දැනෙන්නේ නැත.",
+      "හිස්කබලේ සම හිරිවට්ටා, සමහර රෝගීන් ශල්‍යකර්මය අතරතුර අවදියෙන් සිට කතා කරයි.",
+      "ගෙඩියක් ඉවත් කරන විට කථනය සහ චලනය පාලනය කරන කොටස් ආරක්ෂා කිරීමට මෙය ශල්‍ය වෛද්‍යවරුන්ට උදව් වේ." ] } },
+
+  { video: "videos/04.mp4", tag: "D", source: "Card et al., Nature Medicine, June 2026",
+    en: { title: "Talking through a brain implant, at home", lines: [
+      "A man with ALS could no longer speak clearly or use his hands.",
+      "Tiny electrodes in his brain's speech area read the signals as he tried to speak.",
+      "A computer turned them into text, and he used it at home for almost two years." ] },
+    ta: { title: "மூளையில் பொருத்திய கருவி மூலம் வீட்டிலிருந்தே பேசுதல்", lines: [
+      "ALS நோயால் பாதிக்கப்பட்ட ஒருவரால் தெளிவாகப் பேசவோ கைகளைப் பயன்படுத்தவோ முடியவில்லை.",
+      "அவர் பேச முயன்றபோது, அவரது மூளையின் பேச்சுப் பகுதியில் வைக்கப்பட்ட மிகச் சிறிய மின்முனைகள் சமிக்ஞைகளை வாசித்தன.",
+      "ஒரு கணினி அவற்றை எழுத்துகளாக மாற்றியது; அவர் கிட்டத்தட்ட இரண்டு ஆண்டுகள் வீட்டில் அதைப் பயன்படுத்தினார்." ] },
+    si: { title: "මොළයේ සවි කළ උපකරණයකින් නිවසේදීම කතා කිරීම", lines: [
+      "ALS රෝගයෙන් පෙළුණු පුද්ගලයෙකුට පැහැදිලිව කතා කිරීමට හෝ අත් භාවිත කිරීමට තවදුරටත් නොහැකි විය.",
+      "ඔහු කතා කිරීමට උත්සාහ කරන විට, මොළයේ කථන කොටසේ තැබූ ඉතා කුඩා ඉලෙක්ට්‍රෝඩ එම සංඥා කියවීය.",
+      "පරිගණකයක් ඒවා අකුරු බවට පරිවර්තනය කළ අතර, ඔහු එය වසර දෙකකට ආසන්න කාලයක් නිවසේදී භාවිත කළේය." ] } },
+
+  { video: "videos/05.mp4", tag: "N", source: "5-ALA Phase III glioma trial",
+    en: { title: "Making brain tumours glow pink", lines: [
+      "Hours before surgery, the patient drinks a natural compound called 5-ALA.",
+      "Tumour cells collect it, and under blue light the tumour glows pink.",
+      "In a major trial, complete removal of the tumour rose from 35% to 65% of patients." ] },
+    ta: { title: "மூளைக் கட்டிகளை இளஞ்சிவப்பாக ஒளிரச் செய்தல்", lines: [
+      "சத்திரசிகிச்சைக்குச் சில மணிநேரங்களுக்கு முன், நோயாளி 5-ALA எனப்படும் இயற்கைச் சேர்வையைக் குடிக்கிறார்.",
+      "கட்டிக் கலங்கள் அதைச் சேமித்துக்கொள்கின்றன; நீல ஒளியில் கட்டி இளஞ்சிவப்பாக ஒளிர்கிறது.",
+      "ஒரு முக்கிய ஆய்வில், கட்டி முழுமையாக அகற்றப்பட்ட நோயாளிகளின் வீதம் 35% இலிருந்து 65% ஆக உயர்ந்தது." ] },
+    si: { title: "මොළයේ ගෙඩි රෝස පැහැයෙන් දිලිසෙන්නට සැලැස්වීම", lines: [
+      "ශල්‍යකර්මයට පැය කිහිපයකට පෙර, රෝගියා 5-ALA නම් ස්වාභාවික සංයෝගයක් පානය කරයි.",
+      "ගෙඩියේ සෛල එය එකතු කර ගන්නා අතර, නිල් ආලෝකය යටතේ ගෙඩිය රෝස පැහැයෙන් දිලිසේ.",
+      "ප්‍රධාන පර්යේෂණයකදී, ගෙඩිය සම්පූර්ණයෙන් ඉවත් කළ රෝගීන්ගේ ප්‍රතිශතය 35% සිට 65% දක්වා ඉහළ ගියේය." ] } },
+
+  { video: "videos/06.mp4", tag: "D", source: "Stanford & Emory BrainGate, Cell, August 2025",
+    en: { title: "Reading words a person only imagines", lines: [
+      "Researchers worked with four people paralysed by ALS or stroke.",
+      "Imagined words made brain patterns like trying to speak, only weaker.",
+      "A safeguard makes sure only the words a person chooses to share are decoded." ] },
+    ta: { title: "ஒருவர் மனதில் மட்டும் நினைக்கும் சொற்களை வாசித்தல்", lines: [
+      "ALS நோய் அல்லது பாரிசவாதத்தால் உடல் செயலிழந்த நான்கு பேருடன் ஆய்வாளர்கள் பணியாற்றினர்.",
+      "மனதில் நினைத்த சொற்கள், பேச முயலும்போது தோன்றும் மூளை அமைப்புகளைப் போன்றே, ஆனால் பலவீனமாகத் தோன்றின.",
+      "ஒருவர் பகிர விரும்பும் சொற்கள் மட்டுமே வாசிக்கப்படுவதை ஒரு பாதுகாப்பு ஏற்பாடு உறுதிசெய்கிறது." ] },
+    si: { title: "කෙනෙකු සිතින් පමණක් සිතන වචන කියවීම", lines: [
+      "ALS රෝගය හෝ ආඝාතය නිසා අංශභාගය වූ පුද්ගලයන් හතර දෙනෙකු සමඟ පර්යේෂකයන් කටයුතු කළහ.",
+      "සිතින් සිතූ වචන, කතා කිරීමට උත්සාහ කරන විට මෙන් මොළයේ රටා ඇති කළ නමුත්, ඒවා දුර්වල විය.",
+      "පුද්ගලයා බෙදාගැනීමට තෝරන වචන පමණක් කියවන බව ආරක්ෂිත ක්‍රමයක් මඟින් සහතික කෙරේ." ] } },
+
+  { video: "videos/07.mp4", tag: "N", source: "MR-guided focused ultrasound",
+    en: { title: "Treating tremor without a single cut", lines: [
+      "About a thousand ultrasound beams meet at one tiny point deep in the brain.",
+      "MRI guides the aim and checks the temperature as the treatment happens.",
+      "The heat seals a pin-sized spot that drives the shaking, with no incision or implant." ] },
+    ta: { title: "ஒரு வெட்டும் இல்லாமல் நடுக்கத்துக்குச் சிகிச்சை", lines: [
+      "சுமார் ஆயிரம் அல்ட்ராசவுண்ட் கதிர்கள் மூளையின் ஆழத்தில் உள்ள ஒரு சிறிய புள்ளியில் சந்திக்கின்றன.",
+      "சிகிச்சை நடைபெறும்போது MRI இலக்கைச் சரியாக வழிநடத்தி, வெப்பநிலையையும் கண்காணிக்கிறது.",
+      "அந்த வெப்பம் நடுக்கத்தை உண்டாக்கும் குண்டூசி அளவான இடத்தைச் செயலிழக்கச் செய்கிறது; வெட்டோ பொருத்தும் கருவியோ தேவையில்லை." ] },
+    si: { title: "එක කැපුමක්වත් නැතිව වෙව්ලීමට ප්‍රතිකාර", lines: [
+      "අල්ට්‍රාසවුන්ඩ් කිරණ දහසක් පමණ මොළයේ ගැඹුරේ ඇති එක් ඉතා කුඩා ලක්ෂ්‍යයකට එක්වේ.",
+      "ප්‍රතිකාරය සිදුවන අතරතුර MRI මඟින් ඉලක්කය මෙහෙයවන අතර උෂ්ණත්වයද පරීක්ෂා කරයි.",
+      "එම තාපය වෙව්ලීම ඇති කරන අල්පෙනෙත්තක තරම් කුඩා ස්ථානයක් අක්‍රිය කරයි; කැපුමක් හෝ සවි කරන උපකරණයක් අවශ්‍ය නැත." ] } },
+
+  { video: "videos/08.mp4", tag: "D", source: "UCSF / NIH, September 2026",
+    en: { title: "Speaking and gesturing through an avatar", lines: [
+      "A thin sensor strip on the brain's surface read signals for speech and movement.",
+      "Scientists found the brain works differently when talking and moving at the same time.",
+      "Patients could speak and gesture through an on-screen avatar, making conversation more natural." ] },
+    ta: { title: "திரை உருவம் (அவதார்) மூலம் பேசுதலும் சைகை செய்தலும்", lines: [
+      "மூளையின் மேற்பரப்பில் வைக்கப்பட்ட மெல்லிய உணரி நாடா, பேச்சுக்கும் அசைவுக்குமான சமிக்ஞைகளை வாசித்தது.",
+      "ஒரே நேரத்தில் பேசும்போதும் அசையும்போதும் மூளை வேறுவிதமாகச் செயற்படுவதை விஞ்ஞானிகள் கண்டறிந்தனர்.",
+      "நோயாளிகள் திரையிலுள்ள அவதார் மூலம் பேசவும் சைகை செய்யவும் முடிந்தது; இதனால் உரையாடல் மேலும் இயல்பானதாக மாறியது." ] },
+    si: { title: "තිරයේ රූපයක් (අවතාර්) හරහා කතා කිරීම සහ අභිනය කිරීම", lines: [
+      "මොළයේ මතුපිට තැබූ සිහින් සංවේදක පටියක් කථනයට සහ චලනයට අදාළ සංඥා කියවීය.",
+      "එකවර කතා කරන විට සහ චලනය වන විට මොළය වෙනස් ආකාරයකට ක්‍රියා කරන බව විද්‍යාඥයන් සොයාගත්හ.",
+      "රෝගීන්ට තිරයේ ඇති අවතාරයක් හරහා කතා කිරීමට සහ අභිනය කිරීමට හැකි වූ අතර, එමඟින් සංවාදය වඩාත් ස්වාභාවික විය." ] } },
+
+  { video: "videos/09.mp4", tag: "N", source: "Textbook neurosurgery",
+    en: { title: "Cut nerves can grow back", lines: [
+      "Nerves in the arms and legs can slowly regrow after an injury.",
+      "They grow about one millimetre a day, so recovery can take many months.",
+      "Surgeons join cut nerves with stitches finer than a hair, under a microscope." ] },
+    ta: { title: "வெட்டுப்பட்ட நரம்புகள் மீண்டும் வளரலாம்", lines: [
+      "கைகள் மற்றும் கால்களிலுள்ள நரம்புகள் காயத்துக்குப் பின் மெதுவாக மீண்டும் வளரக்கூடியவை.",
+      "அவை நாளொன்றுக்குச் சுமார் ஒரு மில்லிமீற்றர் மட்டுமே வளர்வதால், குணமடையப் பல மாதங்கள் ஆகலாம்.",
+      "நுணுக்குக்காட்டியின் கீழ், தலைமுடியை விட மெல்லிய தையல்களால் வெட்டுப்பட்ட நரம்புகளை நிபுணர்கள் இணைக்கிறார்கள்." ] },
+    si: { title: "කැපුණු ස්නායු නැවත වැඩිය හැකියි", lines: [
+      "අත් පාවල ස්නායු තුවාලයකින් පසු සෙමින් නැවත වැඩිය හැකිය.",
+      "ඒවා දිනකට මිලිමීටරයක් පමණ වැඩෙන නිසා, සුවය ලැබීමට මාස ගණනාවක් ගත විය හැකිය.",
+      "ශල්‍ය වෛද්‍යවරුන් අන්වීක්ෂයක් යටතේ, හිසකෙසකට වඩා සිහින් මැහුම්වලින් කැපුණු ස්නායු එකට යා කරයි." ] } },
+
+  { video: "videos/10.mp4", tag: "D", source: "MICrONS Consortium, Nature, April 2025",
+    en: { title: "A grain-sized piece of brain, fully wired", lines: [
+      "Scientists mapped one cubic millimetre of mouse brain, about the size of a grain of sand.",
+      "It held over 200,000 cells, 523 million connections and about 4 km of wiring.",
+      "The map shows how brain cells are wired and what they do when the mouse sees." ] },
+    ta: { title: "மணல் துகள் அளவு மூளைப் பகுதியின் முழு இணைப்பு வரைபடம்", lines: [
+      "ஒரு மணல் துகள் அளவான, ஒரு கன மில்லிமீற்றர் எலி மூளையை விஞ்ஞானிகள் முழுமையாக வரைபடமாக்கினர்.",
+      "அதில் 2 இலட்சத்துக்கும் மேற்பட்ட கலங்கள், 52.3 கோடி இணைப்புகள், சுமார் 4 கி.மீ. நீளமான நரம்பு இழைகள் இருந்தன.",
+      "எலி பார்க்கும்போது மூளைக் கலங்கள் எவ்வாறு இணைந்துள்ளன, அவை என்ன செய்கின்றன என்பதை இந்த வரைபடம் காட்டுகிறது." ] },
+    si: { title: "වැලි කැටයක තරම් මොළ කොටසක සම්පූර්ණ රැහැන් සිතියම", lines: [
+      "විද්‍යාඥයන් මීයෙකුගේ මොළයේ ඝන මිලිමීටරයක්, එනම් වැලි කැටයක පමණ ප්‍රමාණයක්, සිතියම්ගත කළහ.",
+      "එහි සෛල 200,000කට වඩා, සම්බන්ධතා මිලියන 523ක් සහ කිලෝමීටර 4ක් පමණ දිග ස්නායු රැහැන් තිබුණි.",
+      "මීයා යමක් දකින විට මොළයේ සෛල සම්බන්ධ වී ඇති ආකාරය සහ ඒවා කරන දේ මෙම සිතියමෙන් පෙන්වයි." ] } },
+
+  { video: "videos/11.mp4", tag: "N", source: "Saver, Stroke 2006; mechanical thrombectomy",
+    en: { title: "Pulling a clot out of the brain", lines: [
+      "In a stroke, the brain can lose about 1.9 million nerve cells every minute.",
+      "Doctors can pass a thin tube from the groin up to the brain and pull the clot out.",
+      "The sooner treatment starts, the more of the brain is saved." ] },
+    ta: { title: "மூளையிலிருந்து இரத்த உறைவை வெளியே இழுத்தல்", lines: [
+      "பாரிசவாதத்தின் போது, மூளை ஒவ்வொரு நிமிடமும் சுமார் 19 இலட்சம் நரம்புக் கலங்களை இழக்கக்கூடும்.",
+      "வைத்தியர்கள் இடுப்புப் பகுதியிலிருந்து மூளை வரை ஒரு மெல்லிய குழாயைச் செலுத்தி, உறைவை வெளியே இழுக்க முடியும்.",
+      "சிகிச்சை எவ்வளவு விரைவாகத் தொடங்குகிறதோ, அவ்வளவு அதிகமான மூளைப் பகுதி காப்பாற்றப்படும்." ] },
+    si: { title: "මොළයේ ලේ කැටියක් පිටතට ඇද ගැනීම", lines: [
+      "ආඝාතයකදී, මොළයට සෑම මිනිත්තුවකම ස්නායු සෛල මිලියන 1.9ක් පමණ අහිමි විය හැකිය.",
+      "වෛද්‍යවරුන්ට කලවා මුල සිට මොළය දක්වා සිහින් නළයක් යවා ලේ කැටිය පිටතට ඇද ගත හැකිය.",
+      "ප්‍රතිකාර කොතරම් ඉක්මනින් ආරම්භ කරනවාද, මොළයේ ඒ තරම් වැඩි කොටසක් බේරා ගත හැකිය." ] } },
+
+  { video: "videos/12.mp4", tag: "D", source: "EPFL / CHUV Switzerland, Nature",
+    en: { title: "Walking again after paralysis", lines: [
+      "Electrodes over the lower spinal cord send pulses timed to each step.",
+      "They copy the signals the brain would normally send to the leg muscles.",
+      "People paralysed for years walked with support, and some improved even with it switched off." ] },
+    ta: { title: "உடல் செயலிழப்புக்குப் பின் மீண்டும் நடத்தல்", lines: [
+      "முண்ணாணின் கீழ்ப் பகுதியில் வைக்கப்பட்ட மின்முனைகள், ஒவ்வொரு அடியுடனும் ஒத்திசைந்த மின் துடிப்புகளை அனுப்புகின்றன.",
+      "மூளை வழக்கமாகக் கால் தசைகளுக்கு அனுப்பும் சமிக்ஞைகளை அவை பின்பற்றுகின்றன.",
+      "பல ஆண்டுகளாகச் செயலிழந்திருந்தவர்கள் உதவியுடன் நடந்தனர்; சிலர் கருவியை நிறுத்திய நிலையிலும் முன்னேற்றம் கண்டனர்." ] },
+    si: { title: "අංශභාගයෙන් පසු නැවත ඇවිදීම", lines: [
+      "සුෂුම්නාවේ පහළ කොටස මත තැබූ ඉලෙක්ට්‍රෝඩ, එක් එක් පියවරට ගැළපෙන සේ ස්පන්දන යවයි.",
+      "සාමාන්‍යයෙන් මොළය කකුල් මාංශ පේශිවලට යවන සංඥා ඒවා අනුකරණය කරයි.",
+      "වසර ගණනාවක් අංශභාගයෙන් සිටි අය ආධාර සහිතව ඇවිද ගිය අතර, සමහරුන් උපකරණය නිවා දැමූ විටත් දියුණුවක් පෙන්වූහ." ] } }
+];
+
+/* ===================== SETTINGS (safe to change) ===================== */
+var SETTINGS = {
+  sentenceSeconds: 6.5,      // normal time each subtitle sentence stays on screen
+  extraSecondsPerChar: 0.04, // longer sentences stay longer (per letter above 80)
+  maxSentenceSeconds: 11,
+  sideCardVideos: true,      // false = side cards show a colour card instead of video
+                             //         (use this if the TV becomes slow or jerky)
+  cursorHideSeconds: 3
+};
+
+/* =====================================================================
+   PROGRAM  (no need to edit below this line)
+   Written in plain old JavaScript so older Smart TV browsers work.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  var LANGS = ["en", "ta", "si"];
+  var N = SLIDES.length;
+  var FALLBACK_GRADIENTS = [
+    "linear-gradient(135deg, #12c8ff 0%, #2a3bff 100%)",
+    "linear-gradient(135deg, #ff3db8 0%, #7a2cff 100%)",
+    "linear-gradient(135deg, #ffb31a 0%, #ff2d78 100%)",
+    "linear-gradient(135deg, #2ee6a8 0%, #1d7bff 100%)",
+    "linear-gradient(135deg, #8b5cff 0%, #ff3db8 100%)",
+    "linear-gradient(135deg, #ff6a3d 0%, #b23dff 100%)"
+  ];
+  // cover-flow positions for distance 0, 1, 2, 3+ from the centre
+  var FLOW = [
+    { x: 0,    rot: 0,  scale: 1,    dim: 0,    op: 1 },
+    { x: 0.47, rot: 62, scale: 0.56, dim: 0.45, op: 1 },
+    { x: 0.62, rot: 66, scale: 0.46, dim: 0.62, op: 1 },
+    { x: 0.72, rot: 70, scale: 0.34, dim: 0.8,  op: 0 }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var menuEl = $("menu"), slidesEl = $("slides"), menuVideo = $("menuVideo");
+  var stage = $("stage"), subs = $("subs"), band = $("band");
+  var tagEl = $("tag"), stitleEl = $("stitle"), sentenceEl = $("sentence");
+  var sourceEl = $("source"), counterEl = $("counter"), barEl = $("bar");
+  var pagerEl = $("pager");
+
+  var mode = "menu";       // "menu" or "slides"
+  var lang = "en";
+  var tileIndex = 0;
+  var current = 0;
+  var lineIndex = 0;
+  var timer = null, fadeTimer = null, bandTimer = null;
+  var cards = [], tiles = [], pagerItems = [];
+  var missing = [];
+  var layout = { cardW: 0, cardH: 0, top: 0 };
+
+  /* ---------- helpers ---------- */
+  function hasClass(el, c) { return (" " + el.className + " ").indexOf(" " + c + " ") > -1; }
+  function addClass(el, c) { if (!hasClass(el, c)) { el.className = (el.className ? el.className + " " : "") + c; } }
+  function removeClass(el, c) { el.className = (" " + el.className + " ").replace(" " + c + " ", " ").replace(/^\s+|\s+$/g, ""); }
+  function setTransform(el, t) { el.style.webkitTransform = t; el.style.transform = t; }
+  function safePlay(v) {
+    try { var p = v.play(); if (p && p["catch"]) { p["catch"](function () {}); } } catch (e) {}
+  }
+  function clearTimers() {
+    clearTimeout(timer); clearTimeout(fadeTimer); clearTimeout(bandTimer);
+  }
+
+  /* ---------- build the language menu ---------- */
+  function buildMenu() {
+    var html = "";
+    for (var i = 0; i < LANGS.length; i++) {
+      html += '<div class="' + LANGS[i] + '">' + UI[LANGS[i]].choose + "</div>";
+    }
+    $("chooseText").innerHTML = html;
+    var box = $("tiles");
+    for (var j = 0; j < LANGS.length; j++) {
+      var t = document.createElement("div");
+      t.className = "tile " + LANGS[j];
+      t.innerHTML = UI[LANGS[j]].tile;
+      (function (k) {
+        t.onclick = function () { selectTile(k); chooseLanguage(LANGS[k]); };
+        t.onmouseover = function () { selectTile(k); };
+      })(j);
+      box.appendChild(t);
+      tiles.push(t);
+    }
+    selectTile(0);
+  }
+  function selectTile(k) {
+    tileIndex = (k + tiles.length) % tiles.length;
+    for (var i = 0; i < tiles.length; i++) {
+      if (i === tileIndex) { addClass(tiles[i], "selected"); } else { removeClass(tiles[i], "selected"); }
+    }
+  }
+
+  /* ---------- build cards and pager ---------- */
+  function buildSlides() {
+    for (var i = 0; i < N; i++) {
+      var c = document.createElement("div");
+      c.className = "card tag" + SLIDES[i].tag;
+      c.innerHTML =
+        '<div class="fallback" style="background:' + FALLBACK_GRADIENTS[i % FALLBACK_GRADIENTS.length] + '">' +
+          '<div class="num">' + (i + 1) + '</div><div class="ftitle"></div></div>' +
+        '<video muted loop playsinline preload="auto"></video>' +
+        '<div class="dim"></div>';
+      var v = c.getElementsByTagName("video")[0];
+      v.muted = true;
+      v.setAttribute("muted", "");
+      v.setAttribute("playsinline", "");
+      v.setAttribute("webkit-playsinline", "");
+      (function (idx, card, video) {
+        video.addEventListener("loadeddata", function () { addClass(card, "ready"); });
+        video.addEventListener("error", function () {
+          if (!video.getAttribute("src")) { return; }   // ignore errors from unloading
+          missing[idx] = true;
+          addClass(card, "missing");
+          video.removeAttribute("src");
+        });
+        card.onclick = function () { if (idx !== current) { goTo(idx); } };
+      })(i, c, v);
+      stage.appendChild(c);
+      cards.push({ el: c, video: v, title: c.getElementsByTagName("div")[2] });
+      missing.push(false);
+    }
+
+    var prev = document.createElement("span");
+    prev.className = "arrow"; prev.innerHTML = "&#9664;";
+    prev.onclick = function () { prevSlide(); };
+    pagerEl.appendChild(prev);
+    for (var j = 0; j < N; j++) {
+      var p = document.createElement("span");
+      p.innerHTML = String(j + 1);
+      (function (k) { p.onclick = function () { goTo(k); }; })(j);
+      pagerEl.appendChild(p);
+      pagerItems.push(p);
+    }
+    var next = document.createElement("span");
+    next.className = "arrow"; next.innerHTML = "&#9654;";
+    next.onclick = function () { nextSlide(); };
+    pagerEl.appendChild(next);
+  }
+
+  /* ---------- sizes (everything scales with the screen) ---------- */
+  function computeLayout() {
+    var W = window.innerWidth, H = window.innerHeight;
+    var areaTop = H * 0.095, areaBottom = H * 0.885;
+    var avail = areaBottom - areaTop;
+    var cardW = Math.min(W * 0.70, avail * 0.88 * 16 / 9);
+    var cardH = cardW * 9 / 16;
+    layout.cardW = cardW; layout.cardH = cardH; layout.top = areaTop;
+    for (var i = 0; i < cards.length; i++) {
+      var s = cards[i].el.style;
+      s.width = cardW + "px"; s.height = cardH + "px";
+      s.marginLeft = (-cardW / 2) + "px"; s.top = areaTop + "px";
+      s.fontSize = (cardW / 100) + "px";
+    }
+    subs.style.width = cardW + "px"; subs.style.height = cardH + "px";
+    subs.style.left = ((W - cardW) / 2) + "px"; subs.style.top = areaTop + "px";
+    subs.style.fontSize = (cardW / 100) + "px";
+    stage.style.webkitPerspective = (W * 2) + "px";
+    stage.style.perspective = (W * 2) + "px";
+    if (mode === "slides") { positionCards(); fitSentence(); }
+  }
+
+  function positionCards() {
+    for (var i = 0; i < cards.length; i++) {
+      var d = i - current, a = Math.abs(d), f = FLOW[Math.min(a, 3)];
+      var sign = d < 0 ? -1 : 1;
+      var el = cards[i].el;
+      setTransform(el, "translateX(" + (sign * f.x * layout.cardW) + "px) rotateY(" +
+        (-sign * f.rot) + "deg) scale(" + f.scale + ")");
+      el.style.opacity = f.op;
+      el.style.zIndex = 20 - a;
+      el.getElementsByTagName("div")[3].style.opacity = f.dim;
+      if (d === 0) { addClass(el, "center"); } else { removeClass(el, "center"); }
+    }
+    for (var j = 0; j < pagerItems.length; j++) {
+      pagerItems[j].className = j === current ? "current" : "";
+    }
+  }
+
+  /* ---------- video control: only the centre video plays ---------- */
+  function loadVideo(i) {
+    var v = cards[i].video;
+    if (missing[i] || v.getAttribute("src")) { return; }
+    v.setAttribute("src", SLIDES[i].video);
+    try { v.load(); } catch (e) {}
+  }
+  function unloadVideo(i) {
+    var v = cards[i].video;
+    if (!v.getAttribute("src")) { return; }
+    try { v.pause(); } catch (e) {}
+    v.removeAttribute("src");
+    try { v.load(); } catch (e) {}
+    removeClass(cards[i].el, "ready");
+  }
+  function updateVideos() {
+    for (var i = 0; i < cards.length; i++) {
+      var a = Math.abs(i - current);
+      var keep = mode === "slides" && (a === 0 || (SETTINGS.sideCardVideos && a <= 2));
+      if (!keep) { unloadVideo(i); continue; }
+      loadVideo(i);
+      var v = cards[i].video;
+      if (a === 0) {
+        try { v.currentTime = 0; } catch (e) {}
+        safePlay(v);
+      } else {
+        try { v.pause(); } catch (e2) {}
+      }
+    }
+  }
+
+  /* ---------- subtitles ---------- */
+  function sentenceMs(text) {
+    var s = SETTINGS.sentenceSeconds + Math.max(0, text.length - 80) * SETTINGS.extraSecondsPerChar;
+    return Math.min(s, SETTINGS.maxSentenceSeconds) * 1000;
+  }
+  function fitSentence() {
+    // big bold text; shrink a little only if it would need more than 3 lines
+    var base = lang === "en" ? 3.7 : 3.2;     // in "em" of 1% card width
+    var min = base * 0.78, size = base;
+    sentenceEl.style.fontSize = size + "em";
+    var px = layout.cardW / 100;
+    while (size > min && sentenceEl.offsetHeight > 3 * 1.32 * size * px + 2) {
+      size -= 0.1;
+      sentenceEl.style.fontSize = size + "em";
+    }
+  }
+  function setBar(fromFrac, toFrac, ms) {
+    barEl.style.webkitTransition = "none"; barEl.style.transition = "none";
+    barEl.style.width = (fromFrac * 100) + "%";
+    void barEl.offsetWidth;   // apply before starting the animation
+    var t = "width " + ms + "ms linear";
+    barEl.style.webkitTransition = t; barEl.style.transition = t;
+    barEl.style.width = (toFrac * 100) + "%";
+  }
+  function showLine(k) {
+    var lines = SLIDES[current][lang].lines;
+    lineIndex = k;
+    sentenceEl.innerHTML = lines[k];
+    fitSentence();
+    addClass(sentenceEl, "show");
+    var ms = sentenceMs(lines[k]);
+    setBar(k / lines.length, (k + 1) / lines.length, ms + (k < lines.length - 1 ? 500 : 0));
+    timer = setTimeout(function () {
+      if (k < lines.length - 1) {
+        removeClass(sentenceEl, "show");
+        fadeTimer = setTimeout(function () { showLine(k + 1); }, 500);
+      } else {
+        nextSlide(true);
+      }
+    }, ms);
+  }
+  function startSubtitles() {
+    var s = SLIDES[current], t = s[lang];
+    removeClass(band, "show");
+    removeClass(sentenceEl, "show");
+    bandTimer = setTimeout(function () {
+      tagEl.className = "tag" + s.tag;
+      tagEl.innerHTML = UI[lang][s.tag];
+      stitleEl.innerHTML = t.title;
+      sourceEl.innerHTML = "Source: " + s.source;
+      counterEl.innerHTML = (current + 1) + " / " + N;
+      addClass(band, "show");
+      showLine(0);
+    }, 900);
+  }
+
+  /* ---------- navigation ---------- */
+  function goTo(i) {
+    if (mode !== "slides") { return; }
+    clearTimers();
+    current = (i + N) % N;
+    positionCards();
+    updateVideos();
+    startSubtitles();
+  }
+  function nextSlide(auto) {
+    if (current >= N - 1) {
+      if (auto) { showMenu(); return; }   // finished the last slide: back to the menu
+      goTo(0); return;
+    }
+    goTo(current + 1);
+  }
+  function prevSlide() { goTo(current - 1); }
+
+  function applyLanguage() {
+    document.documentElement.lang = lang;
+    $("headerText").innerHTML = UI[lang].header;
+    for (var i = 0; i < cards.length; i++) { cards[i].title.innerHTML = SLIDES[i][lang].title; }
+  }
+
+  function chooseLanguage(l) {
+    if (mode !== "menu") { return; }
+    lang = l;
+    applyLanguage();
+    mode = "slides";
+    armBackGuard();
+    requestWakeLock();
+    removeClass(menuEl, "active");
+    addClass(slidesEl, "active");
+    try { menuVideo.pause(); } catch (e) {}
+    current = 0;
+    computeLayout();
+    positionCards();
+    updateVideos();
+    startSubtitles();
+  }
+
+  function showMenu() {
+    if (mode === "menu") { return; }
+    clearTimers();
+    mode = "menu";
+    removeClass(band, "show");
+    removeClass(slidesEl, "active");
+    addClass(menuEl, "active");
+    updateVideos();            // unloads all slide videos
+    selectTile(0);
+    safePlay(menuVideo);
+  }
+
+  /* ---------- TV remote / keyboard ---------- */
+  var KEY_LEFT = 37, KEY_RIGHT = 39, KEY_ENTER = 13, KEY_SPACE = 32;
+  var BACK_KEYS = { 10009: 1, 461: 1, 27: 1, 8: 1 };   // Samsung, LG, Esc, Backspace
+
+  document.addEventListener("keydown", function (e) {
+    var k = e.keyCode || e.which;
+    if (mode === "menu" && menuVideo.paused) { safePlay(menuVideo); }
+    if (mode === "menu") {
+      if (k === KEY_LEFT) { selectTile(tileIndex - 1); e.preventDefault(); }
+      else if (k === KEY_RIGHT) { selectTile(tileIndex + 1); e.preventDefault(); }
+      else if (k === KEY_ENTER || k === KEY_SPACE) { chooseLanguage(LANGS[tileIndex]); e.preventDefault(); }
+      else if (BACK_KEYS[k]) { e.preventDefault(); }   // stay on the menu, don't leave the page
+    } else {
+      if (k === KEY_LEFT) { prevSlide(); e.preventDefault(); }
+      else if (k === KEY_RIGHT) { nextSlide(false); e.preventDefault(); }
+      else if (BACK_KEYS[k]) { showMenu(); e.preventDefault(); }
+    }
+  }, false);
+
+  /* The TV browser's own BACK button may try to leave the page.
+     We keep an extra history entry so BACK just returns to the menu. */
+  var guardArmed = false;
+  function armBackGuard() {
+    if (guardArmed || !window.history || !history.pushState) { return; }
+    try { history.pushState({ medscope: 1 }, ""); guardArmed = true; } catch (e) {}
+  }
+  window.addEventListener("popstate", function () {
+    guardArmed = false;
+    showMenu();
+    armBackGuard();
+  }, false);
+
+  /* ---------- hide the mouse cursor when idle ---------- */
+  var cursorTimer = null;
+  document.addEventListener("mousemove", function () {
+    removeClass(document.body, "hide-cursor");
+    clearTimeout(cursorTimer);
+    cursorTimer = setTimeout(function () { addClass(document.body, "hide-cursor"); },
+      SETTINGS.cursorHideSeconds * 1000);
+  }, false);
+
+  /* ---------- keep the screen awake ---------- */
+  var wakeLock = null;
+  function requestWakeLock() {
+    try {
+      if (navigator.wakeLock && navigator.wakeLock.request && !wakeLock) {
+        navigator.wakeLock.request("screen").then(function (l) {
+          wakeLock = l;
+          l.addEventListener("release", function () { wakeLock = null; });
+        })["catch"](function () {});
+      }
+    } catch (e) {}
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") { requestWakeLock(); }
+  }, false);
+  document.addEventListener("click", requestWakeLock, false);
+
+  /* ---------- start ---------- */
+  menuVideo.muted = true;
+  menuVideo.addEventListener("error", function () { menuVideo.style.display = "none"; });
+  buildMenu();
+  buildSlides();
+  applyLanguage();
+  computeLayout();
+  positionCards();
+  window.addEventListener("resize", computeLayout, false);
+  safePlay(menuVideo);
+  requestWakeLock();
+})();
+</script>
+</body>
+</html>
