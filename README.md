@@ -7,6 +7,6 @@ exhibition (English / தமிழ் / සිංහල).
 - `start-tv.bat` / `start-tv.sh` – start a local web server on port 8000
 - `HOW-TO-RUN.txt` – step-by-step instructions for exhibition day
 - `fonts/` – Oswald, Atkinson Hyperlegible, Noto Sans Tamil, Noto Sans Sinhala (SIL Open Font License)
-- `videos/` and `images/` – put `menu.mp4`, `01.mp4`…`12.mp4` and `background.jpg` here
+- `videos/` and `images/` – put `menu.mp4`, `01.mp4`…`10.mp4` and `background.jpg` here
 
 The Tamil and Sinhala text must be checked by native speakers before use.

@@ -202,6 +202,69 @@ html[lang="ta"] #header, html[lang="si"] #header { letter-spacing: 0.02em; font-
 #progress { margin-top: 0.8em; height: 0.35em; border-radius: 0.2em; background: rgba(255,255,255,0.16); overflow: hidden; }
 #bar { height: 100%; width: 0; background: linear-gradient(90deg, #2ee6ff, #8b5cff, #ff3db8, #ffb400); }
 
+/* ----- Intro: "New discoveries around the world" ----- */
+#intro {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  text-align: center; z-index: 60;
+  opacity: 0; visibility: hidden;
+  -webkit-transition: opacity 0.8s ease, visibility 0s linear 0.8s;
+  transition: opacity 0.8s ease, visibility 0s linear 0.8s;
+}
+#slides.intro #intro {
+  opacity: 1; visibility: visible;
+  -webkit-transition: opacity 0.8s ease, visibility 0s linear 0s;
+  transition: opacity 0.8s ease, visibility 0s linear 0s;
+}
+#slides #stage, #slides #subs, #slides #pager {
+  -webkit-transition: opacity 0.8s ease; transition: opacity 0.8s ease;
+}
+#slides.intro #stage, #slides.intro #subs, #slides.intro #pager { opacity: 0; }
+#introInner {
+  position: absolute; left: 10vw; width: 80vw; top: 12vh;
+  -webkit-transform-origin: 50% 0; transform-origin: 50% 0;
+}
+#globe { width: 13vh; height: 13vh; display: block; margin: 0 auto 2.5vh auto; }
+#globe .spin {
+  -webkit-transform-origin: 50px 50px; transform-origin: 50px 50px;
+  -webkit-animation: globeSpin 9s linear infinite; animation: globeSpin 9s linear infinite;
+}
+@-webkit-keyframes globeSpin { from { -webkit-transform: scaleX(1); } 50% { -webkit-transform: scaleX(-1); } to { -webkit-transform: scaleX(1); } }
+@keyframes globeSpin { from { transform: scaleX(1); } 50% { transform: scaleX(-1); } to { transform: scaleX(1); } }
+#introKicker {
+  display: inline-block; padding: 0.5vh 2.2vh; margin-bottom: 2vh;
+  border-radius: 3vh; border: 0.25vh solid rgba(255,255,255,0.6);
+  font-family: "Oswald", "Noto Sans Tamil", "Noto Sans Sinhala", sans-serif;
+  font-weight: 500; font-size: 2.6vh; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #fff;
+}
+#introTitle {
+  font-family: "Oswald", "Noto Sans Tamil", "Noto Sans Sinhala", sans-serif;
+  font-weight: 700; font-size: 4.6vw; line-height: 1.2; text-transform: uppercase;
+  letter-spacing: 0.04em; margin-bottom: 4.5vh;
+}
+html[lang="ta"] #introTitle, html[lang="si"] #introTitle { font-size: 3.3vw; letter-spacing: 0; }
+html[lang="ta"] #introKicker, html[lang="si"] #introKicker { letter-spacing: 0.05em; }
+#introTitle span {
+  background: linear-gradient(90deg, #2ee6ff 0%, #8b5cff 35%, #ff3db8 68%, #ffb400 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.introLine {
+  font-weight: 700; font-size: 2.3vw; line-height: 1.35; margin: 0 auto 2.6vh auto;
+  text-shadow: 0 0.1vw 0.5vw rgba(0,0,0,0.9);
+  opacity: 0; -webkit-transform: translateY(2vh); transform: translateY(2vh);
+  -webkit-transition: opacity 0.8s ease, -webkit-transform 0.8s ease;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+html[lang="ta"] .introLine, html[lang="si"] .introLine { font-size: 1.8vw; }
+.introLine.show { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); }
+.introLine.l2 { color: #ffd36b; }
+#introProgress {
+  position: absolute; left: 30vw; width: 40vw; bottom: 5vh; height: 0.6vh;
+  border-radius: 0.3vh; background: rgba(255,255,255,0.16); overflow: hidden;
+}
+#introBar { height: 100%; width: 0; background: linear-gradient(90deg, #2ee6ff, #8b5cff, #ff3db8, #ffb400); }
+
 /* ----- Numbered pager ----- */
 #pager {
   position: absolute; left: 0; bottom: 2.6vh; width: 100%;
@@ -251,6 +314,26 @@ html[lang="ta"] #header, html[lang="si"] #header { letter-spacing: 0.02em; font-
     </div>
   </div>
   <div id="pager"></div>
+  <div id="intro">
+    <div id="introInner">
+      <svg id="globe" viewBox="0 0 100 100">
+        <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#2ee6ff"/><stop offset="0.5" stop-color="#8b5cff"/><stop offset="1" stop-color="#ff3db8"/>
+        </linearGradient></defs>
+        <g fill="none" stroke="url(#gg)" stroke-width="3">
+          <circle cx="50" cy="50" r="44"/>
+          <path d="M6 50 H94 M12 28 H88 M12 72 H88"/>
+          <g class="spin"><ellipse cx="50" cy="50" rx="20" ry="44"/><path d="M50 6 V94"/></g>
+        </g>
+      </svg>
+      <div id="introKicker"></div>
+      <div id="introTitle"><span></span></div>
+      <div class="introLine"></div>
+      <div class="introLine l2"></div>
+      <div class="introLine"></div>
+    </div>
+    <div id="introProgress"><div id="introBar"></div></div>
+  </div>
 </div>
 
 <script>
@@ -270,16 +353,35 @@ html[lang="ta"] #header, html[lang="si"] #header { letter-spacing: 0.02em; font-
 var UI = {
   en: { tile: "English", choose: "Choose your language",
         header: "Neurosurgery & Neuroscience",
-        N: "Neurosurgery", D: "New discovery" },
+        N: "Neurosurgery", D: "New discovery",
+        introKicker: "Around the world",
+        introTitle: "New discoveries and developments",
+        introLines: [
+          "The next screens show brain treatments and research from hospitals and laboratories around the world.",
+          "Some are already used in Sri Lanka. Many are very new and not yet available here.",
+          "They show where brain surgery and brain science are heading." ] },
   ta: { tile: "தமிழ்", choose: "உங்கள் மொழியைத் தெரிவுசெய்யுங்கள்",
         header: "நரம்பியல் சத்திரசிகிச்சை & நரம்பியல் விஞ்ஞானம்",
-        N: "நரம்பியல் சத்திரசிகிச்சை", D: "புதிய கண்டுபிடிப்பு" },
+        N: "நரம்பியல் சத்திரசிகிச்சை", D: "புதிய கண்டுபிடிப்பு",
+        introKicker: "உலகெங்கிலும்",
+        introTitle: "புதிய கண்டுபிடிப்புகளும் முன்னேற்றங்களும்",
+        introLines: [
+          "அடுத்து வரும் திரைகள் உலகெங்கிலுமுள்ள வைத்தியசாலைகளிலும் ஆய்வுகூடங்களிலும் உருவான மூளைச் சிகிச்சைகளையும் ஆய்வுகளையும் காட்டுகின்றன.",
+          "இவற்றில் சில ஏற்கனவே இலங்கையில் பயன்பாட்டில் உள்ளன. பல மிகப் புதியவை; இன்னும் இங்கு கிடைப்பதில்லை.",
+          "மூளைச் சத்திரசிகிச்சையும் மூளை விஞ்ஞானமும் எந்தத் திசையில் செல்கின்றன என்பதை இவை காட்டுகின்றன." ] },
   si: { tile: "සිංහල", choose: "ඔබේ භාෂාව තෝරන්න",
         header: "ස්නායු ශල්‍යකර්ම සහ ස්නායු විද්‍යාව",
-        N: "ස්නායු ශල්‍යකර්ම", D: "නව සොයාගැනීම" }
+        N: "ස්නායු ශල්‍යකර්ම", D: "නව සොයාගැනීම",
+        introKicker: "ලොව පුරා",
+        introTitle: "නව සොයාගැනීම් සහ දියුණුව",
+        introLines: [
+          "ඊළඟ තිරවලින් ලොව පුරා රෝහල් සහ පර්යේෂණාගාරවල මොළය පිළිබඳ ප්‍රතිකාර සහ පර්යේෂණ පෙන්වයි.",
+          "මේවායින් සමහරක් දැනටමත් ශ්‍රී ලංකාවේ භාවිත වේ. බොහොමයක් ඉතා අලුත් වන අතර තවමත් මෙරට නොමැත.",
+          "මොළයේ ශල්‍යකර්ම සහ මොළය පිළිබඳ විද්‍යාව ඉදිරියට යන්නේ කොතැනටද යන්න මේවායින් පෙනේ." ] }
 };
 
 var SLIDES = [
+  // 01  original clip: https://youtu.be/xDCB7v9xC9Q
   { video: "videos/01.mp4", tag: "N", source: "General neurosurgical practice",
     en: { title: "What does a neurosurgeon do?", lines: [
       "Neurosurgeons operate on the brain, the spinal cord and the nerves of the body.",
@@ -294,21 +396,8 @@ var SLIDES = [
       "ඔවුන් ගෙඩි, හිසේ සහ කොඳු ඇට පෙළේ තුවාල, මොළයේ ලේ ගැලීම් සහ හිරවූ ස්නායු සඳහා ප්‍රතිකාර කරයි.",
       "අද බොහෝ ශල්‍යකර්ම සඳහා අන්වීක්ෂ, කුඩා සිදුරු සහ පරිගණක මඟපෙන්වීම භාවිත කෙරේ." ] } },
 
-  { video: "videos/02.mp4", tag: "D", source: "Nobel Prize in Physiology or Medicine 2026",
-    en: { title: "Switching brain cells on and off with light", lines: [
-      "The 2026 Nobel Prize in Medicine was awarded for optogenetics.",
-      "A light-sensitive protein from a tiny green alga is placed into nerve cells.",
-      "A flash of light can then switch chosen neurons on or off, showing what each circuit does." ] },
-    ta: { title: "ஒளியால் மூளைக் கலங்களை இயக்குதலும் நிறுத்துதலும்", lines: [
-      "2026 மருத்துவ நோபல் பரிசு, ஒளியால் கலங்களைக் கட்டுப்படுத்தும் ஒப்டோஜெனெட்டிக்ஸ் ஆய்வுக்கு வழங்கப்பட்டது.",
-      "ஒரு சிறிய பச்சைப் பாசியிலிருந்து பெறப்பட்ட, ஒளியை உணரும் புரதம் நரம்புக் கலங்களுக்குள் செலுத்தப்படுகிறது.",
-      "ஒளிக்கீற்று மூலம் தெரிவுசெய்த நரம்புக் கலங்களை இயக்கவோ நிறுத்தவோ முடியும்; இதனால் ஒவ்வொரு சுற்றின் வேலையும் தெரிகிறது." ] },
-    si: { title: "ආලෝකයෙන් මොළයේ සෛල ක්‍රියාත්මක කිරීම සහ නැවැත්වීම", lines: [
-      "2026 වෛද්‍ය විද්‍යාව සඳහා වූ නොබෙල් ත්‍යාගය ඔප්ටොජෙනටික්ස් (ආලෝකයෙන් සෛල පාලනය) සඳහා පිරිනැමිණි.",
-      "කුඩා කොළ පැහැති ඇල්ගාවකින් ලබාගත් ආලෝකයට සංවේදී ප්‍රෝටීනයක් ස්නායු සෛල තුළට ඇතුළු කෙරේ.",
-      "ඉන්පසු ආලෝක දැල්වීමකින් තෝරාගත් ස්නායු සෛල ක්‍රියාත්මක කිරීමට හෝ නැවැත්වීමට හැකි අතර, එක් එක් පරිපථය කරන්නේ කුමක්දැයි එයින් පෙනේ." ] } },
-
-  { video: "videos/03.mp4", tag: "N", source: "Standard neurosurgical practice",
+  // 02  original clip: https://youtu.be/ntX3r4DYpp8
+  { video: "videos/02.mp4", tag: "N", source: "Standard neurosurgical practice",
     en: { title: "Awake brain surgery", lines: [
       "The brain itself has no pain receptors, so it cannot feel the surgeon's touch.",
       "With the scalp numbed, some patients stay awake and talk during the operation.",
@@ -322,6 +411,22 @@ var SLIDES = [
       "හිස්කබලේ සම හිරිවට්ටා, සමහර රෝගීන් ශල්‍යකර්මය අතරතුර අවදියෙන් සිට කතා කරයි.",
       "ගෙඩියක් ඉවත් කරන විට කථනය සහ චලනය පාලනය කරන කොටස් ආරක්ෂා කිරීමට මෙය ශල්‍ය වෛද්‍යවරුන්ට උදව් වේ." ] } },
 
+  // 03  original clip: https://youtu.be/CVML3Cjta5Y
+  { video: "videos/03.mp4", tag: "D", source: "Nobel Prize in Physiology or Medicine 2026",
+    en: { title: "Switching brain cells on and off with light", lines: [
+      "The 2026 Nobel Prize in Medicine was awarded for optogenetics.",
+      "A light-sensitive protein from a tiny green alga is placed into nerve cells.",
+      "A flash of light can then switch chosen neurons on or off, showing what each circuit does." ] },
+    ta: { title: "ஒளியால் மூளைக் கலங்களை இயக்குதலும் நிறுத்துதலும்", lines: [
+      "2026 மருத்துவ நோபல் பரிசு, ஒளியால் கலங்களைக் கட்டுப்படுத்தும் ஒப்டோஜெனெட்டிக்ஸ் ஆய்வுக்கு வழங்கப்பட்டது.",
+      "ஒரு சிறிய பச்சைப் பாசியிலிருந்து பெறப்பட்ட, ஒளியை உணரும் புரதம் நரம்புக் கலங்களுக்குள் செலுத்தப்படுகிறது.",
+      "ஒளிக்கீற்று மூலம் தெரிவுசெய்த நரம்புக் கலங்களை இயக்கவோ நிறுத்தவோ முடியும்; இதனால் ஒவ்வொரு சுற்றின் வேலையும் தெரிகிறது." ] },
+    si: { title: "ආලෝකයෙන් මොළයේ සෛල ක්‍රියාත්මක කිරීම සහ නැවැත්වීම", lines: [
+      "2026 වෛද්‍ය විද්‍යාව සඳහා වූ නොබෙල් ත්‍යාගය ඔප්ටොජෙනටික්ස් (ආලෝකයෙන් සෛල පාලනය) සඳහා පිරිනැමිණි.",
+      "කුඩා කොළ පැහැති ඇල්ගාවකින් ලබාගත් ආලෝකයට සංවේදී ප්‍රෝටීනයක් ස්නායු සෛල තුළට ඇතුළු කෙරේ.",
+      "ඉන්පසු ආලෝක දැල්වීමකින් තෝරාගත් ස්නායු සෛල ක්‍රියාත්මක කිරීමට හෝ නැවැත්වීමට හැකි අතර, එක් එක් පරිපථය කරන්නේ කුමක්දැයි එයින් පෙනේ." ] } },
+
+  // 04  original clip: https://youtu.be/fS4Hb8qjiOU
   { video: "videos/04.mp4", tag: "D", source: "Card et al., Nature Medicine, June 2026",
     en: { title: "Talking through a brain implant, at home", lines: [
       "A man with ALS could no longer speak clearly or use his hands.",
@@ -336,6 +441,7 @@ var SLIDES = [
       "ඔහු කතා කිරීමට උත්සාහ කරන විට, මොළයේ කථන කොටසේ තැබූ ඉතා කුඩා ඉලෙක්ට්‍රෝඩ එම සංඥා කියවීය.",
       "පරිගණකයක් ඒවා අකුරු බවට පරිවර්තනය කළ අතර, ඔහු එය වසර දෙකකට ආසන්න කාලයක් නිවසේදී භාවිත කළේය." ] } },
 
+  // 05  original clip: https://youtu.be/vcnPY3Y6DN4
   { video: "videos/05.mp4", tag: "N", source: "5-ALA Phase III glioma trial",
     en: { title: "Making brain tumours glow pink", lines: [
       "Hours before surgery, the patient drinks a natural compound called 5-ALA.",
@@ -350,21 +456,8 @@ var SLIDES = [
       "ගෙඩියේ සෛල එය එකතු කර ගන්නා අතර, නිල් ආලෝකය යටතේ ගෙඩිය රෝස පැහැයෙන් දිලිසේ.",
       "ප්‍රධාන පර්යේෂණයකදී, ගෙඩිය සම්පූර්ණයෙන් ඉවත් කළ රෝගීන්ගේ ප්‍රතිශතය 35% සිට 65% දක්වා ඉහළ ගියේය." ] } },
 
-  { video: "videos/06.mp4", tag: "D", source: "Stanford & Emory BrainGate, Cell, August 2025",
-    en: { title: "Reading words a person only imagines", lines: [
-      "Researchers worked with four people paralysed by ALS or stroke.",
-      "Imagined words made brain patterns like trying to speak, only weaker.",
-      "A safeguard makes sure only the words a person chooses to share are decoded." ] },
-    ta: { title: "ஒருவர் மனதில் மட்டும் நினைக்கும் சொற்களை வாசித்தல்", lines: [
-      "ALS நோய் அல்லது பாரிசவாதத்தால் உடல் செயலிழந்த நான்கு பேருடன் ஆய்வாளர்கள் பணியாற்றினர்.",
-      "மனதில் நினைத்த சொற்கள், பேச முயலும்போது தோன்றும் மூளை அமைப்புகளைப் போன்றே, ஆனால் பலவீனமாகத் தோன்றின.",
-      "ஒருவர் பகிர விரும்பும் சொற்கள் மட்டுமே வாசிக்கப்படுவதை ஒரு பாதுகாப்பு ஏற்பாடு உறுதிசெய்கிறது." ] },
-    si: { title: "කෙනෙකු සිතින් පමණක් සිතන වචන කියවීම", lines: [
-      "ALS රෝගය හෝ ආඝාතය නිසා අංශභාගය වූ පුද්ගලයන් හතර දෙනෙකු සමඟ පර්යේෂකයන් කටයුතු කළහ.",
-      "සිතින් සිතූ වචන, කතා කිරීමට උත්සාහ කරන විට මෙන් මොළයේ රටා ඇති කළ නමුත්, ඒවා දුර්වල විය.",
-      "පුද්ගලයා බෙදාගැනීමට තෝරන වචන පමණක් කියවන බව ආරක්ෂිත ක්‍රමයක් මඟින් සහතික කෙරේ." ] } },
-
-  { video: "videos/07.mp4", tag: "N", source: "MR-guided focused ultrasound",
+  // 06  original clip: https://youtu.be/XNk3UF488mg
+  { video: "videos/06.mp4", tag: "N", source: "MR-guided focused ultrasound",
     en: { title: "Treating tremor without a single cut", lines: [
       "About a thousand ultrasound beams meet at one tiny point deep in the brain.",
       "MRI guides the aim and checks the temperature as the treatment happens.",
@@ -378,21 +471,8 @@ var SLIDES = [
       "ප්‍රතිකාරය සිදුවන අතරතුර MRI මඟින් ඉලක්කය මෙහෙයවන අතර උෂ්ණත්වයද පරීක්ෂා කරයි.",
       "එම තාපය වෙව්ලීම ඇති කරන අල්පෙනෙත්තක තරම් කුඩා ස්ථානයක් අක්‍රිය කරයි; කැපුමක් හෝ සවි කරන උපකරණයක් අවශ්‍ය නැත." ] } },
 
-  { video: "videos/08.mp4", tag: "D", source: "UCSF / NIH, September 2026",
-    en: { title: "Speaking and gesturing through an avatar", lines: [
-      "A thin sensor strip on the brain's surface read signals for speech and movement.",
-      "Scientists found the brain works differently when talking and moving at the same time.",
-      "Patients could speak and gesture through an on-screen avatar, making conversation more natural." ] },
-    ta: { title: "திரை உருவம் (அவதார்) மூலம் பேசுதலும் சைகை செய்தலும்", lines: [
-      "மூளையின் மேற்பரப்பில் வைக்கப்பட்ட மெல்லிய உணரி நாடா, பேச்சுக்கும் அசைவுக்குமான சமிக்ஞைகளை வாசித்தது.",
-      "ஒரே நேரத்தில் பேசும்போதும் அசையும்போதும் மூளை வேறுவிதமாகச் செயற்படுவதை விஞ்ஞானிகள் கண்டறிந்தனர்.",
-      "நோயாளிகள் திரையிலுள்ள அவதார் மூலம் பேசவும் சைகை செய்யவும் முடிந்தது; இதனால் உரையாடல் மேலும் இயல்பானதாக மாறியது." ] },
-    si: { title: "තිරයේ රූපයක් (අවතාර්) හරහා කතා කිරීම සහ අභිනය කිරීම", lines: [
-      "මොළයේ මතුපිට තැබූ සිහින් සංවේදක පටියක් කථනයට සහ චලනයට අදාළ සංඥා කියවීය.",
-      "එකවර කතා කරන විට සහ චලනය වන විට මොළය වෙනස් ආකාරයකට ක්‍රියා කරන බව විද්‍යාඥයන් සොයාගත්හ.",
-      "රෝගීන්ට තිරයේ ඇති අවතාරයක් හරහා කතා කිරීමට සහ අභිනය කිරීමට හැකි වූ අතර, එමඟින් සංවාදය වඩාත් ස්වාභාවික විය." ] } },
-
-  { video: "videos/09.mp4", tag: "N", source: "Textbook neurosurgery",
+  // 07  original clip: https://youtu.be/3FZd3SBj-mc
+  { video: "videos/07.mp4", tag: "N", source: "Textbook neurosurgery",
     en: { title: "Cut nerves can grow back", lines: [
       "Nerves in the arms and legs can slowly regrow after an injury.",
       "They grow about one millimetre a day, so recovery can take many months.",
@@ -406,21 +486,8 @@ var SLIDES = [
       "ඒවා දිනකට මිලිමීටරයක් පමණ වැඩෙන නිසා, සුවය ලැබීමට මාස ගණනාවක් ගත විය හැකිය.",
       "ශල්‍ය වෛද්‍යවරුන් අන්වීක්ෂයක් යටතේ, හිසකෙසකට වඩා සිහින් මැහුම්වලින් කැපුණු ස්නායු එකට යා කරයි." ] } },
 
-  { video: "videos/10.mp4", tag: "D", source: "MICrONS Consortium, Nature, April 2025",
-    en: { title: "A grain-sized piece of brain, fully wired", lines: [
-      "Scientists mapped one cubic millimetre of mouse brain, about the size of a grain of sand.",
-      "It held over 200,000 cells, 523 million connections and about 4 km of wiring.",
-      "The map shows how brain cells are wired and what they do when the mouse sees." ] },
-    ta: { title: "மணல் துகள் அளவு மூளைப் பகுதியின் முழு இணைப்பு வரைபடம்", lines: [
-      "ஒரு மணல் துகள் அளவான, ஒரு கன மில்லிமீற்றர் எலி மூளையை விஞ்ஞானிகள் முழுமையாக வரைபடமாக்கினர்.",
-      "அதில் 2 இலட்சத்துக்கும் மேற்பட்ட கலங்கள், 52.3 கோடி இணைப்புகள், சுமார் 4 கி.மீ. நீளமான நரம்பு இழைகள் இருந்தன.",
-      "எலி பார்க்கும்போது மூளைக் கலங்கள் எவ்வாறு இணைந்துள்ளன, அவை என்ன செய்கின்றன என்பதை இந்த வரைபடம் காட்டுகிறது." ] },
-    si: { title: "වැලි කැටයක තරම් මොළ කොටසක සම්පූර්ණ රැහැන් සිතියම", lines: [
-      "විද්‍යාඥයන් මීයෙකුගේ මොළයේ ඝන මිලිමීටරයක්, එනම් වැලි කැටයක පමණ ප්‍රමාණයක්, සිතියම්ගත කළහ.",
-      "එහි සෛල 200,000කට වඩා, සම්බන්ධතා මිලියන 523ක් සහ කිලෝමීටර 4ක් පමණ දිග ස්නායු රැහැන් තිබුණි.",
-      "මීයා යමක් දකින විට මොළයේ සෛල සම්බන්ධ වී ඇති ආකාරය සහ ඒවා කරන දේ මෙම සිතියමෙන් පෙන්වයි." ] } },
-
-  { video: "videos/11.mp4", tag: "N", source: "Saver, Stroke 2006; mechanical thrombectomy",
+  // 08  original clip: https://youtu.be/lK1PMed9D88
+  { video: "videos/08.mp4", tag: "N", source: "Saver, Stroke 2006; mechanical thrombectomy",
     en: { title: "Pulling a clot out of the brain", lines: [
       "In a stroke, the brain can lose about 1.9 million nerve cells every minute.",
       "Doctors can pass a thin tube from the groin up to the brain and pull the clot out.",
@@ -434,7 +501,23 @@ var SLIDES = [
       "වෛද්‍යවරුන්ට කලවා මුල සිට මොළය දක්වා සිහින් නළයක් යවා ලේ කැටිය පිටතට ඇද ගත හැකිය.",
       "ප්‍රතිකාර කොතරම් ඉක්මනින් ආරම්භ කරනවාද, මොළයේ ඒ තරම් වැඩි කොටසක් බේරා ගත හැකිය." ] } },
 
-  { video: "videos/12.mp4", tag: "D", source: "EPFL / CHUV Switzerland, Nature",
+  // 09  original clip: https://youtu.be/UHDfvfYCY0U
+  { video: "videos/09.mp4", tag: "D", source: "MICrONS Consortium, Nature, April 2025",
+    en: { title: "A grain-sized piece of brain, fully wired", lines: [
+      "Scientists mapped one cubic millimetre of mouse brain, about the size of a grain of sand.",
+      "It held over 200,000 cells, 523 million connections and about 4 km of wiring.",
+      "The map shows how brain cells are wired and what they do when the mouse sees." ] },
+    ta: { title: "மணல் துகள் அளவு மூளைப் பகுதியின் முழு இணைப்பு வரைபடம்", lines: [
+      "ஒரு மணல் துகள் அளவான, ஒரு கன மில்லிமீற்றர் எலி மூளையை விஞ்ஞானிகள் முழுமையாக வரைபடமாக்கினர்.",
+      "அதில் 2 இலட்சத்துக்கும் மேற்பட்ட கலங்கள், 52.3 கோடி இணைப்புகள், சுமார் 4 கி.மீ. நீளமான நரம்பு இழைகள் இருந்தன.",
+      "எலி பார்க்கும்போது மூளைக் கலங்கள் எவ்வாறு இணைந்துள்ளன, அவை என்ன செய்கின்றன என்பதை இந்த வரைபடம் காட்டுகிறது." ] },
+    si: { title: "වැලි කැටයක තරම් මොළ කොටසක සම්පූර්ණ රැහැන් සිතියම", lines: [
+      "විද්‍යාඥයන් මීයෙකුගේ මොළයේ ඝන මිලිමීටරයක්, එනම් වැලි කැටයක පමණ ප්‍රමාණයක්, සිතියම්ගත කළහ.",
+      "එහි සෛල 200,000කට වඩා, සම්බන්ධතා මිලියන 523ක් සහ කිලෝමීටර 4ක් පමණ දිග ස්නායු රැහැන් තිබුණි.",
+      "මීයා යමක් දකින විට මොළයේ සෛල සම්බන්ධ වී ඇති ආකාරය සහ ඒවා කරන දේ මෙම සිතියමෙන් පෙන්වයි." ] } },
+
+  // 10  original clip: https://youtu.be/1LHcdFRx47c
+  { video: "videos/10.mp4", tag: "D", source: "EPFL / CHUV Switzerland, Nature",
     en: { title: "Walking again after paralysis", lines: [
       "Electrodes over the lower spinal cord send pulses timed to each step.",
       "They copy the signals the brain would normally send to the leg muscles.",
@@ -451,6 +534,7 @@ var SLIDES = [
 
 /* ===================== SETTINGS (safe to change) ===================== */
 var SETTINGS = {
+  introSeconds: 15,          // "New discoveries around the world" screen after choosing a language
   sentenceSeconds: 6.5,      // normal time each subtitle sentence stays on screen
   extraSecondsPerChar: 0.04, // longer sentences stay longer (per letter above 80)
   maxSentenceSeconds: 11,
@@ -491,12 +575,12 @@ var SETTINGS = {
   var sourceEl = $("source"), counterEl = $("counter"), barEl = $("bar");
   var pagerEl = $("pager");
 
-  var mode = "menu";       // "menu" or "slides"
+  var mode = "menu";       // "menu", "intro" or "slides"
   var lang = "en";
   var tileIndex = 0;
   var current = 0;
   var lineIndex = 0;
-  var timer = null, fadeTimer = null, bandTimer = null;
+  var timer = null, fadeTimer = null, bandTimer = null, introTimers = [];
   var cards = [], tiles = [], pagerItems = [];
   var missing = [];
   var layout = { cardW: 0, cardH: 0, top: 0 };
@@ -511,6 +595,8 @@ var SETTINGS = {
   }
   function clearTimers() {
     clearTimeout(timer); clearTimeout(fadeTimer); clearTimeout(bandTimer);
+    for (var i = 0; i < introTimers.length; i++) { clearTimeout(introTimers[i]); }
+    introTimers = [];
   }
 
   /* ---------- build the language menu ---------- */
@@ -608,6 +694,7 @@ var SETTINGS = {
     stage.style.webkitPerspective = (W * 2) + "px";
     stage.style.perspective = (W * 2) + "px";
     if (mode === "slides") { positionCards(); fitSentence(); }
+    fitIntro();
   }
 
   function positionCards() {
@@ -735,21 +822,66 @@ var SETTINGS = {
   function applyLanguage() {
     document.documentElement.lang = lang;
     $("headerText").innerHTML = UI[lang].header;
+    $("introKicker").innerHTML = UI[lang].introKicker;
+    $("introTitle").getElementsByTagName("span")[0].innerHTML = UI[lang].introTitle;
+    var il = introLineList();
+    for (var j = 0; j < il.length; j++) { il[j].innerHTML = UI[lang].introLines[j] || ""; }
+    fitIntro();
     for (var i = 0; i < cards.length; i++) { cards[i].title.innerHTML = SLIDES[i][lang].title; }
+  }
+
+  function introLineEls() { return $("introInner").getElementsByTagName("div"); }
+  function introLineList() {
+    var all = introLineEls(), out = [];
+    for (var i = 0; i < all.length; i++) { if (hasClass(all[i], "introLine")) { out.push(all[i]); } }
+    return out;
+  }
+
+  // shrink the intro text block if it would run into the progress bar
+  function fitIntro() {
+    var inner = $("introInner");
+    setTransform(inner, "none");
+    var room = window.innerHeight * 0.92 - inner.offsetTop;
+    var h = inner.offsetHeight;
+    if (h > room) { setTransform(inner, "scale(" + (room / h) + ")"); }
   }
 
   function chooseLanguage(l) {
     if (mode !== "menu") { return; }
     lang = l;
     applyLanguage();
-    mode = "slides";
+    mode = "intro";
     armBackGuard();
     requestWakeLock();
     removeClass(menuEl, "active");
+    addClass(slidesEl, "intro");
     addClass(slidesEl, "active");
     try { menuVideo.pause(); } catch (e) {}
     current = 0;
     computeLayout();
+    positionCards();
+    // "New discoveries around the world" screen, lines appear one by one
+    var lines = introLineList(), ms = SETTINGS.introSeconds * 1000;
+    for (var i = 0; i < lines.length; i++) {
+      removeClass(lines[i], "show");
+      (function (el, delay) {
+        introTimers.push(setTimeout(function () { addClass(el, "show"); }, delay));
+      })(lines[i], 900 + i * 1600);
+    }
+    var bar = $("introBar");
+    bar.style.webkitTransition = "none"; bar.style.transition = "none"; bar.style.width = "0%";
+    void bar.offsetWidth;
+    bar.style.webkitTransition = "width " + ms + "ms linear"; bar.style.transition = "width " + ms + "ms linear";
+    bar.style.width = "100%";
+    introTimers.push(setTimeout(startCarousel, ms));
+  }
+
+  function startCarousel() {
+    if (mode !== "intro") { return; }
+    clearTimers();
+    mode = "slides";
+    removeClass(slidesEl, "intro");
+    current = 0;
     positionCards();
     updateVideos();
     startSubtitles();
@@ -761,6 +893,7 @@ var SETTINGS = {
     mode = "menu";
     removeClass(band, "show");
     removeClass(slidesEl, "active");
+    removeClass(slidesEl, "intro");
     addClass(menuEl, "active");
     updateVideos();            // unloads all slide videos
     selectTile(0);
@@ -779,6 +912,9 @@ var SETTINGS = {
       else if (k === KEY_RIGHT) { selectTile(tileIndex + 1); e.preventDefault(); }
       else if (k === KEY_ENTER || k === KEY_SPACE) { chooseLanguage(LANGS[tileIndex]); e.preventDefault(); }
       else if (BACK_KEYS[k]) { e.preventDefault(); }   // stay on the menu, don't leave the page
+    } else if (mode === "intro") {
+      if (k === KEY_RIGHT || k === KEY_ENTER || k === KEY_SPACE) { startCarousel(); e.preventDefault(); }
+      else if (BACK_KEYS[k]) { showMenu(); e.preventDefault(); }
     } else {
       if (k === KEY_LEFT) { prevSlide(); e.preventDefault(); }
       else if (k === KEY_RIGHT) { nextSlide(false); e.preventDefault(); }
@@ -834,6 +970,7 @@ var SETTINGS = {
   computeLayout();
   positionCards();
   window.addEventListener("resize", computeLayout, false);
+  $("intro").onclick = function () { startCarousel(); };
   safePlay(menuVideo);
   requestWakeLock();
 })();

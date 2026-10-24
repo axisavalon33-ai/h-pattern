@@ -1,1 +1,1 @@
-Put menu.mp4 and 01.mp4 ... 12.mp4 in this folder.
+Put menu.mp4 and 01.mp4 ... 10.mp4 in this folder (see HOW-TO-RUN.txt for which is which).

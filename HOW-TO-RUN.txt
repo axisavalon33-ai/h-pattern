@@ -15,13 +15,32 @@ CHECK THE FOLDER LOOKS LIKE THIS
   fonts\                 (font files - do not delete)
   images\background.jpg
   videos\menu.mp4
-  videos\01.mp4 ... videos\12.mp4
+  videos\01.mp4 ... videos\10.mp4   (see the list below)
 
   Video names must be exactly 01.mp4, 02.mp4 ... (two digits, small
   letters ".mp4"). If a video is missing, the screen still works and
   shows a colourful card with the slide number and title instead.
   Videos should be normal MP4 files (H.264). Most video tools save
   this by default.
+
+WHICH VIDEO GOES WITH WHICH NUMBER
+  01.mp4  What does a neurosurgeon do?
+  02.mp4  Awake brain surgery
+  03.mp4  Optogenetics (switching brain cells on/off with light)
+  04.mp4  Talking through a brain implant, at home
+  05.mp4  Glowing brain tumours (5-ALA)
+  06.mp4  Focused ultrasound for tremor
+  07.mp4  Nerve repair
+  08.mp4  Stroke clot removal
+  09.mp4  The brain map (MICrONS)
+  10.mp4  Walking again after paralysis
+  (The YouTube link for each one is also written next to it inside
+  index.html, so you can find the original again.)
+
+  Tip: keep each edited video short (10-30 seconds is plenty) - it
+  loops while the 3 subtitles play (about 20-25 seconds per slide).
+  Before showing anyone's YouTube video in public, check you have
+  permission from the owner.
 
 
 ---------------------------------------------------------------
@@ -73,6 +92,9 @@ USING THE REMOTE
   MENU
     Left / Right ......... move between English, Tamil, Sinhala
     OK / Enter ........... start in that language
+  "NEW DISCOVERIES AROUND THE WORLD" SCREEN (shown first, 15 seconds)
+    OK / Enter / Right ... skip straight to the slides
+    BACK (or Esc) ........ return to the language menu
   SLIDES
     Left / Right ......... previous / next slide
     BACK (or Esc) ........ return to the language menu
@@ -95,7 +117,10 @@ CHANGING THE WORDS
   read every line BEFORE the exhibition and correct it in index.html.
 
   Timing: in the SETTINGS section, "sentenceSeconds: 6.5" is how long
-  each subtitle stays on screen.
+  each subtitle stays on screen, and "introSeconds: 15" is how long the
+  "New discoveries around the world" screen stays.
+  The words on that screen are in the UI section (introTitle,
+  introLines).
 
   If the TV is slow or the videos stutter: in SETTINGS change
   "sideCardVideos: true" to "sideCardVideos: false". Then only the big
