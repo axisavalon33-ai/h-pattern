@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>MEDSCOPE II – Neurosurgery &amp; Neuroscience</title>
 <style>
 /* ===================== FONTS (stored in ./fonts, works offline) ===================== */
@@ -30,6 +30,9 @@ html, body {
   font-family: "Atkinson Hyperlegible", "Noto Sans Tamil", "Noto Sans Sinhala", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -ms-touch-action: manipulation; touch-action: manipulation;   /* no double-tap zoom */
 }
 body.hide-cursor, body.hide-cursor * { cursor: none !important; }
 .screen {
@@ -273,20 +276,31 @@ html[lang="ta"] .introLine, html[lang="si"] .introLine { font-size: 1.8vw; }
 }
 #pager span {
   display: inline-block; vertical-align: middle;
-  min-width: 4.4vh; height: 4.4vh; line-height: 4.4vh;
+  min-width: 5.6vh; height: 5.6vh; line-height: 5.6vh;
   margin: 0 0.35vw; padding: 0 0.6vh;
-  border-radius: 2.4vh;
-  font-size: 2.3vh; color: rgba(255,255,255,0.7);
+  border-radius: 2.8vh;
+  font-size: 2.6vh; color: rgba(255,255,255,0.7);
   background: rgba(255,255,255,0.08);
   cursor: pointer;
   -webkit-transition: all 0.4s ease; transition: all 0.4s ease;
 }
-#pager span.arrow { background: transparent; font-size: 2.6vh; color: rgba(255,255,255,0.85); }
+#pager span.arrow { background: transparent; font-size: 3.2vh; min-width: 7vh; color: rgba(255,255,255,0.85); }
 #pager span.current {
-  color: #fff; font-weight: 700; font-size: 2.7vh; min-width: 6vh;
+  color: #fff; font-weight: 700; font-size: 3vh; min-width: 7vh;
   background: linear-gradient(90deg, #2ee6ff, #8b5cff, #ff3db8, #ffb400);
   box-shadow: 0 0 1.4vh rgba(139,92,255,0.8);
 }
+/* ----- Touch: button back to the language menu ----- */
+#homeBtn {
+  position: absolute; left: 1.6vw; top: 1.4vh; z-index: 70;
+  height: 5.6vh; line-height: 5.6vh; padding: 0 2.2vh 0 1.6vh;
+  border-radius: 2.8vh;
+  background: rgba(255,255,255,0.12); border: 0.2vh solid rgba(255,255,255,0.45);
+  font-weight: 700; font-size: 2.4vh; color: #fff; white-space: nowrap;
+  cursor: pointer;
+}
+#homeBtn:active { background: rgba(255,255,255,0.3); }
+#homeBtn b { font-size: 2.6vh; margin-right: 1vh; }
 </style>
 </head>
 <body class="hide-cursor">
@@ -304,6 +318,7 @@ html[lang="ta"] .introLine, html[lang="si"] .introLine { font-size: 1.8vw; }
 <div id="slides" class="screen">
   <div id="tint"></div>
   <div id="header"><span id="headerText"></span></div>
+  <div id="homeBtn"><b>&#9664;</b><span id="homeText"></span></div>
   <div id="stage"></div>
   <div id="subs">
     <div id="band">
@@ -353,6 +368,7 @@ html[lang="ta"] .introLine, html[lang="si"] .introLine { font-size: 1.8vw; }
 var UI = {
   en: { tile: "English", choose: "Choose your language",
         header: "Neurosurgery & Neuroscience",
+        home: "Language",
         N: "Neurosurgery", D: "New discovery",
         introKicker: "Around the world",
         introTitle: "New discoveries and developments",
@@ -362,6 +378,7 @@ var UI = {
           "They show where brain surgery and brain science are heading." ] },
   ta: { tile: "தமிழ்", choose: "உங்கள் மொழியைத் தெரிவுசெய்யுங்கள்",
         header: "நரம்பியல் சத்திரசிகிச்சை & நரம்பியல் விஞ்ஞானம்",
+        home: "மொழி",
         N: "நரம்பியல் சத்திரசிகிச்சை", D: "புதிய கண்டுபிடிப்பு",
         introKicker: "உலகெங்கிலும்",
         introTitle: "புதிய கண்டுபிடிப்புகளும் முன்னேற்றங்களும்",
@@ -371,6 +388,7 @@ var UI = {
           "மூளைச் சத்திரசிகிச்சையும் மூளை விஞ்ஞானமும் எந்தத் திசையில் செல்கின்றன என்பதை இவை காட்டுகின்றன." ] },
   si: { tile: "සිංහල", choose: "ඔබේ භාෂාව තෝරන්න",
         header: "ස්නායු ශල්‍යකර්ම සහ ස්නායු විද්‍යාව",
+        home: "භාෂාව",
         N: "ස්නායු ශල්‍යකර්ම", D: "නව සොයාගැනීම",
         introKicker: "ලොව පුරා",
         introTitle: "නව සොයාගැනීම් සහ දියුණුව",
@@ -823,6 +841,7 @@ var SETTINGS = {
   function applyLanguage() {
     document.documentElement.lang = lang;
     $("headerText").innerHTML = UI[lang].header;
+    $("homeText").innerHTML = UI[lang].home;
     $("introKicker").innerHTML = UI[lang].introKicker;
     $("introTitle").getElementsByTagName("span")[0].innerHTML = UI[lang].introTitle;
     var il = introLineList();
@@ -985,6 +1004,24 @@ var SETTINGS = {
   positionCards();
   window.addEventListener("resize", computeLayout, false);
   $("intro").onclick = function () { startCarousel(); };
+  $("homeBtn").onclick = function (e) { if (e && e.stopPropagation) { e.stopPropagation(); } showMenu(); };
+
+  /* ---------- touch screen: swipe left / right to change slides ---------- */
+  var touchX = null, touchY = null;
+  slidesEl.addEventListener("touchstart", function (e) {
+    if (e.touches && e.touches.length === 1) { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; }
+    else { touchX = null; }
+  }, false);
+  slidesEl.addEventListener("touchend", function (e) {
+    if (touchX === null || !e.changedTouches || !e.changedTouches.length) { return; }
+    var dx = e.changedTouches[0].clientX - touchX, dy = e.changedTouches[0].clientY - touchY;
+    touchX = null;
+    if (Math.abs(dx) < window.innerWidth * 0.06 || Math.abs(dx) < Math.abs(dy)) { return; }
+    if (mode === "intro") { startCarousel(); }
+    else if (mode === "slides") { if (dx < 0) { nextSlide(false); } else { prevSlide(); } }
+  }, false);
+  // no long-press menu on the touch screen
+  document.addEventListener("contextmenu", function (e) { e.preventDefault(); }, false);
   safePlay(menuVideo);
   requestWakeLock();
 })();

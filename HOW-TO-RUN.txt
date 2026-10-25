@@ -12,6 +12,7 @@ CHECK THE FOLDER LOOKS LIKE THIS
   index.html
   start-tv.bat           (Windows)
   start-tv.sh            (Mac / Linux)
+  start-kiosk.bat        (Windows, touch screen locked full screen)
   fonts\                 (font files - do not delete)
   images\background.jpg
   videos\menu.mp4
@@ -111,7 +112,18 @@ HOW VISITORS CHOOSE A LANGUAGE (the TV is not a touch screen)
     its USB dongle into the TV. Next/Back buttons move, the "play" or
     "blank" button chooses.
   - Wireless mouse or keyboard: plug its USB dongle into the TV.
-  - Touch screen: if you use a touch monitor or touch TV, just tap.
+  - TOUCH SCREEN: just tap a language tile.
+      On the slides: swipe left/right, or tap a number at the bottom,
+      or tap a side card. Tap the "< Language" button (top-left) to go
+      back to the menu.
+
+TOUCH SCREEN CONNECTED TO THE LAPTOP (HDMI + USB touch cable)
+  Double-click  start-kiosk.bat  instead of start-tv.bat.
+  It starts everything and opens Chrome locked in full screen, so
+  visitors cannot reach the address bar or close the page.
+  To get out of it at the end of the day: press Alt+F4 on the laptop
+  keyboard, then close the black window.
+  (If the touch TV has its own web browser, use Step 3 instead.)
   Tip: tie the remote or clicker to the stand with a string, and put a
   small card next to it:  "Press 1 English  2 தமிழ்  3 සිංහල".
 
