@@ -137,8 +137,8 @@ html[lang="ta"] #header, html[lang="si"] #header { letter-spacing: 0.02em; font-
 .card.missing video { display: none; }
 .fallback {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  padding-top: 6%; -webkit-box-sizing: border-box; box-sizing: border-box;
-  text-align: center;   /* number + title sit in the top half, above the subtitles */
+  padding-top: 14%; -webkit-box-sizing: border-box; box-sizing: border-box;
+  text-align: center;
 }
 .fallback .num {
   font-family: "Oswald", sans-serif; font-weight: 700;
@@ -160,49 +160,54 @@ html[lang="ta"] #header, html[lang="si"] #header { letter-spacing: 0.02em; font-
 
 /* ----- Subtitle overlay: sits exactly on top of the centre card ----- */
 #subs {
+  /* subtitle panel BELOW the centre video (position/size set by the script) */
   position: absolute; left: 0; top: 0;
-  border-radius: 1.1vw; overflow: hidden;
   pointer-events: none; z-index: 50;
 }
 #band {
-  position: absolute; left: 0; bottom: 0; width: 100%;
-  padding: 7em 3.2em 1.6em 3.2em;
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  padding: 1em 2.2em 0 2.2em;
   -webkit-box-sizing: border-box; box-sizing: border-box;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.86) 100%);
-  opacity: 0; -webkit-transition: opacity 0.5s ease; transition: opacity 0.5s ease;
+  background: rgba(6,8,22,0.82);
+  border: 0.1em solid rgba(255,255,255,0.14); border-top-width: 0.28em;
+  border-radius: 1em;
+  box-shadow: 0 1em 2.5em rgba(0,0,0,0.5);
+  opacity: 0; -webkit-transition: opacity 0.5s ease, border-color 0.5s ease; transition: opacity 0.5s ease, border-color 0.5s ease;
 }
 #band.show { opacity: 1; }
-#line1 { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; margin-bottom: 0.9em; }
+#band.tagN { border-top-color: #2ee6ff; }
+#band.tagD { border-top-color: #ff3db8; }
+#line1 { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; margin-bottom: 0.6em; }
 #tag {
   -webkit-flex-shrink: 0; flex-shrink: 0;
-  padding: 0.35em 1em; margin-right: 1em;
+  padding: 0.3em 0.95em; margin-right: 0.9em;
   border-radius: 2em;
-  font-weight: 700; font-size: 1.85em; line-height: 1.2; color: #fff;
+  font-weight: 700; font-size: 1.2em; line-height: 1.2; color: #fff;
   white-space: nowrap;
 }
 #tag.tagN { background: linear-gradient(90deg, #12c8ff, #2a6bff); box-shadow: 0 0 1em rgba(46,230,255,0.55); }
 #tag.tagD { background: linear-gradient(90deg, #ff3db8, #a23dff); box-shadow: 0 0 1em rgba(255,61,184,0.55); }
 #stitle {
   font-family: "Oswald", "Noto Sans Tamil", "Noto Sans Sinhala", sans-serif;
-  font-weight: 500; font-size: 2.6em; line-height: 1.25; color: #e8f3ff;
-  text-shadow: 0 0.06em 0.25em rgba(0,0,0,0.8);
+  font-weight: 500; font-size: 1.6em; line-height: 1.25; color: #e8f3ff;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 #sentenceBox { position: relative; }
 #sentence {
-  font-weight: 700; line-height: 1.32; color: #fff;
-  text-shadow: 0 0.06em 0.12em rgba(0,0,0,0.95), 0 0 0.6em rgba(0,0,0,0.7);
+  font-weight: 700; line-height: 1.3; color: #fff;
   opacity: 0; -webkit-transition: opacity 0.5s ease; transition: opacity 0.5s ease;
 }
 #sentence.show { opacity: 1; }
+#bottomRow { position: absolute; left: 2.2em; right: 2.2em; bottom: 0.9em; }
 #line3 {
   display: -webkit-box; display: -webkit-flex; display: flex;
   -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-  margin-top: 1.1em;
-  font-size: 1.5em; color: rgba(255,255,255,0.78);
+  font-size: 0.95em; color: rgba(255,255,255,0.75);
 }
-#source { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-#counter { margin-left: 1.5em; font-family: "Oswald", sans-serif; font-weight: 500; font-size: 1.25em; color: #fff; letter-spacing: 0.06em; }
-#progress { margin-top: 0.8em; height: 0.35em; border-radius: 0.2em; background: rgba(255,255,255,0.16); overflow: hidden; }
+#source { display: none; }   /* sources stay in the SLIDES list for reference, but are not shown */
+#line3 { -webkit-box-pack: end; -webkit-justify-content: flex-end; justify-content: flex-end; }
+#counter { margin-left: 1.5em; font-family: "Oswald", sans-serif; font-weight: 500; font-size: 1.2em; color: #fff; letter-spacing: 0.06em; }
+#progress { margin-top: 0.5em; height: 0.3em; border-radius: 0.2em; background: rgba(255,255,255,0.16); overflow: hidden; }
 #bar { height: 100%; width: 0; background: linear-gradient(90deg, #2ee6ff, #8b5cff, #ff3db8, #ffb400); }
 
 /* ----- Intro: "New discoveries around the world" ----- */
@@ -270,7 +275,7 @@ html[lang="ta"] .introLine, html[lang="si"] .introLine { font-size: 1.8vw; }
 
 /* ----- Numbered pager ----- */
 #pager {
-  position: absolute; left: 0; bottom: 2.6vh; width: 100%;
+  position: absolute; left: 0; bottom: 1.8vh; width: 100%;
   text-align: center; white-space: nowrap;
   font-family: "Oswald", sans-serif; font-weight: 500;
 }
@@ -324,8 +329,10 @@ html[lang="ta"] .introLine, html[lang="si"] .introLine { font-size: 1.8vw; }
     <div id="band">
       <div id="line1"><span id="tag"></span><span id="stitle"></span></div>
       <div id="sentenceBox"><div id="sentence"></div></div>
-      <div id="line3"><span id="source"></span><span id="counter"></span></div>
-      <div id="progress"><div id="bar"></div></div>
+      <div id="bottomRow">
+        <div id="line3"><span id="source"></span><span id="counter"></span></div>
+        <div id="progress"><div id="bar"></div></div>
+      </div>
     </div>
   </div>
   <div id="pager"></div>
@@ -696,10 +703,13 @@ var SETTINGS = {
   /* ---------- sizes (everything scales with the screen) ---------- */
   function computeLayout() {
     var W = window.innerWidth, H = window.innerHeight;
-    var areaTop = H * 0.095, areaBottom = H * 0.885;
-    var avail = areaBottom - areaTop;
-    var cardW = Math.min(W * 0.70, avail * 0.88 * 16 / 9);
-    var cardH = cardW * 9 / 16;
+    // top to bottom: header, video card, subtitle panel, number buttons
+    var areaTop = H * 0.085, pagerTop = H * 0.905, gap = H * 0.016;
+    var panelH = H * 0.235;
+    var cardH = pagerTop - gap - panelH - gap - areaTop;
+    var cardW = Math.min(W * 0.70, cardH * 16 / 9);
+    cardH = cardW * 9 / 16;
+    var panelW = Math.min(W * 0.86, Math.max(cardW, W * 0.80));
     layout.cardW = cardW; layout.cardH = cardH; layout.top = areaTop;
     for (var i = 0; i < cards.length; i++) {
       var s = cards[i].el.style;
@@ -707,9 +717,9 @@ var SETTINGS = {
       s.marginLeft = (-cardW / 2) + "px"; s.top = areaTop + "px";
       s.fontSize = (cardW / 100) + "px";
     }
-    subs.style.width = cardW + "px"; subs.style.height = cardH + "px";
-    subs.style.left = ((W - cardW) / 2) + "px"; subs.style.top = areaTop + "px";
-    subs.style.fontSize = (cardW / 100) + "px";
+    subs.style.width = panelW + "px"; subs.style.height = panelH + "px";
+    subs.style.left = ((W - panelW) / 2) + "px"; subs.style.top = (areaTop + cardH + gap) + "px";
+    subs.style.fontSize = (Math.min(W / 100, H / 56.25)) + "px";
     stage.style.webkitPerspective = (W * 2) + "px";
     stage.style.perspective = (W * 2) + "px";
     if (mode === "slides") { positionCards(); fitSentence(); }
@@ -770,13 +780,13 @@ var SETTINGS = {
     return Math.min(s, SETTINGS.maxSentenceSeconds) * 1000;
   }
   function fitSentence() {
-    // big bold text; shrink a little only if it would need more than 3 lines
-    var base = lang === "en" ? 3.7 : 3.2;     // in "em" of 1% card width
-    var min = base * 0.78, size = base;
+    // big bold text; shrink a little only if it would run into the source line
+    var base = lang === "en" ? 2.35 : 2.05;   // in "em" of the panel text size
+    var min = base * 0.75, size = base;
     sentenceEl.style.fontSize = size + "em";
-    var px = layout.cardW / 100;
-    while (size > min && sentenceEl.offsetHeight > 3 * 1.32 * size * px + 2) {
-      size -= 0.1;
+    var limit = $("bottomRow").getBoundingClientRect().top - 4;
+    while (size > min && sentenceEl.getBoundingClientRect().bottom > limit) {
+      size -= 0.05;
       sentenceEl.style.fontSize = size + "em";
     }
   }
@@ -811,6 +821,7 @@ var SETTINGS = {
     removeClass(sentenceEl, "show");
     bandTimer = setTimeout(function () {
       tagEl.className = "tag" + s.tag;
+      band.className = band.className.replace(/\s*tag[ND]/g, "") + " tag" + s.tag;
       tagEl.innerHTML = UI[lang][s.tag];
       stitleEl.innerHTML = t.title;
       sourceEl.innerHTML = "Source: " + s.source;
