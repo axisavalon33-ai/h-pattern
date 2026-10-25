@@ -103,6 +103,19 @@ USING THE REMOTE
   goes back to the language menu and waits for the next visitor.
 
 
+HOW VISITORS CHOOSE A LANGUAGE (the TV is not a touch screen)
+  - TV remote: Left / Right, then OK.  Or press 1, 2 or 3 on the
+    number buttons: 1 = English, 2 = Tamil, 3 = Sinhala.
+  - Samsung / LG "pointer" remote: move the arrow onto a tile, press OK.
+  - Wireless presentation clicker (USB, about Rs. 2,000-4,000): plug
+    its USB dongle into the TV. Next/Back buttons move, the "play" or
+    "blank" button chooses.
+  - Wireless mouse or keyboard: plug its USB dongle into the TV.
+  - Touch screen: if you use a touch monitor or touch TV, just tap.
+  Tip: tie the remote or clicker to the stand with a string, and put a
+  small card next to it:  "Press 1 English  2 தமிழ்  3 සිංහල".
+
+
 ---------------------------------------------------------------
 CHANGING THE WORDS
 ---------------------------------------------------------------

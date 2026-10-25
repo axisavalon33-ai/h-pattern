@@ -611,6 +611,7 @@ var SETTINGS = {
       var t = document.createElement("div");
       t.className = "tile " + LANGS[j];
       t.innerHTML = UI[LANGS[j]].tile;
+      t.title = String(j + 1);
       (function (k) {
         t.onclick = function () { selectTile(k); chooseLanguage(LANGS[k]); };
         t.onmouseover = function () { selectTile(k); };
@@ -904,8 +905,21 @@ var SETTINGS = {
   var KEY_LEFT = 37, KEY_RIGHT = 39, KEY_ENTER = 13, KEY_SPACE = 32;
   var BACK_KEYS = { 10009: 1, 461: 1, 27: 1, 8: 1 };   // Samsung, LG, Esc, Backspace
 
+  // other buttons that act the same (presentation clickers, keyboards, remotes)
+  var KEY_ALIASES = {
+    33: KEY_LEFT, 38: KEY_LEFT,      // Page Up (clicker "back"), Up arrow
+    34: KEY_RIGHT, 40: KEY_RIGHT,    // Page Down (clicker "next"), Down arrow
+    116: KEY_ENTER, 190: KEY_ENTER   // F5 / "." (clicker "play" or "blank" button)
+  };
+  // number keys 1, 2, 3 on a remote or keyboard pick a language straight away
+  var NUMBER_LANG = { 49: 0, 50: 1, 51: 2, 97: 0, 98: 1, 99: 2 };
+
   document.addEventListener("keydown", function (e) {
     var k = e.keyCode || e.which;
+    if (mode === "menu" && NUMBER_LANG.hasOwnProperty(k)) {
+      selectTile(NUMBER_LANG[k]); chooseLanguage(LANGS[NUMBER_LANG[k]]); e.preventDefault(); return;
+    }
+    if (KEY_ALIASES.hasOwnProperty(k)) { k = KEY_ALIASES[k]; }
     if (mode === "menu" && menuVideo.paused) { safePlay(menuVideo); }
     if (mode === "menu") {
       if (k === KEY_LEFT) { selectTile(tileIndex - 1); e.preventDefault(); }
