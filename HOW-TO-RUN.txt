@@ -24,22 +24,27 @@ CHECK THE FOLDER LOOKS LIKE THIS
   Videos should be normal MP4 files (H.264). Most video tools save
   this by default.
 
-WHICH VIDEO GOES WITH WHICH NUMBER
-  01.mp4  What does a neurosurgeon do?
-  02.mp4  Awake brain surgery
-  03.mp4  Optogenetics (switching brain cells on/off with light)
-  04.mp4  Talking through a brain implant, at home
-  05.mp4  Glowing brain tumours (5-ALA)
-  06.mp4  Focused ultrasound for tremor
-  07.mp4  Nerve repair
-  08.mp4  Stroke clot removal
-  09.mp4  The brain map (MICrONS)
-  10.mp4  Walking again after paralysis
+WHICH VIDEO GOES WITH WHICH NUMBER (and its length)
+  01.mp4  What does a neurosurgeon do? ................. 2:07
+  02.mp4  Awake brain surgery .......................... 0:25
+  03.mp4  Optogenetics (brain cells switched by light) . 1:07
+  04.mp4  Talking through a brain implant, at home ..... 0:40
+  05.mp4  Glowing brain tumours (5-ALA) ................ 0:33
+  06.mp4  Focused ultrasound for tremor ................ 0:44
+  07.mp4  Nerve repair ................................. 0:40
+  08.mp4  Stroke clot removal .......................... 1:11
+  09.mp4  The brain map (MICrONS) ...................... 0:44
+  10.mp4  Moving and feeling again (double neural bypass) 0:45
   (The YouTube link for each one is also written next to it inside
   index.html, so you can find the original again.)
 
-  Tip: keep each edited video short (10-30 seconds is plenty) - it
-  loops while the 3 subtitles play (about 20-25 seconds per slide).
+  The subtitles are timed to these lengths: each slide plays its video
+  once, from start to end, then moves on. A full visit takes about
+  10 minutes.
+  IF YOU RE-EDIT A VIDEO and its length changes, open index.html and
+  change its  length: "0:40"  value to the new length. The subtitles
+  re-time themselves automatically.
+
   Before showing anyone's YouTube video in public, check you have
   permission from the owner.
 

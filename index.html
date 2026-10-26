@@ -370,6 +370,10 @@ html[lang="ta"] .introLine, html[lang="si"] .introLine { font-size: 1.8vw; }
    and put its video in the videos folder. Numbering and the pager
    update automatically.
    tag: "N" = Neurosurgery (cyan),  "D" = New discovery (magenta)
+   length: the video's length ("minutes:seconds"). The slide lasts exactly
+           this long, and the sentences are shared out across it, giving
+           longer sentences more time. Keep about one sentence per 8-9
+           seconds of video so visitors can read them in every language.
    ===================================================================== */
 
 var UI = {
@@ -407,154 +411,244 @@ var UI = {
 
 var SLIDES = [
   // 01  original clip: https://youtu.be/xDCB7v9xC9Q
-  { video: "videos/01.mp4", tag: "N", source: "General neurosurgical practice",
+  { video: "videos/01.mp4", tag: "N", length: "2:07", source: "General neurosurgical practice",
     en: { title: "What does a neurosurgeon do?", lines: [
-      "Neurosurgeons operate on the brain, the spinal cord and the nerves of the body.",
-      "They treat tumours, head and spine injuries, bleeding in the brain and trapped nerves.",
-      "Many operations now use microscopes, small openings and computer navigation." ] },
+      "Neurosurgeons are doctors who operate on the brain, the spinal cord and the nerves.",
+      "After medical school, they train for many more years to become specialists.",
+      "They treat brain tumours, head injuries and bleeding inside the skull.",
+      "They also operate on the spine, for slipped discs, injuries and trapped nerves.",
+      "Children are treated too, for example when fluid builds up inside the brain.",
+      "Before an operation, CT and MRI scans show the inside of the head in detail.",
+      "Many operations now use small openings instead of large cuts.",
+      "A powerful microscope lets the surgeon see tiny blood vessels and nerves.",
+      "Computer navigation works like GPS, showing exactly where the instruments are.",
+      "During surgery, machines check that important nerves are still working.",
+      "Some brain operations are done through the nose, using a thin camera.",
+      "Many operations last several hours and need a large team.",
+      "After surgery, many patients are watched closely in intensive care.",
+      "Physiotherapy helps many patients return to their daily lives." ] },
     ta: { title: "நரம்பியல் சத்திரசிகிச்சை நிபுணர் என்ன செய்கிறார்?", lines: [
-      "நரம்பியல் சத்திரசிகிச்சை நிபுணர்கள் மூளை, முண்ணாண் மற்றும் உடலின் நரம்புகளில் சத்திரசிகிச்சை செய்கிறார்கள்.",
-      "கட்டிகள், தலை மற்றும் முதுகெலும்புக் காயங்கள், மூளையில் இரத்தக்கசிவு, அழுத்தப்பட்ட நரம்புகளுக்கு அவர்கள் சிகிச்சை அளிக்கிறார்கள்.",
-      "இன்று பல சத்திரசிகிச்சைகளில் நுணுக்குக்காட்டி, சிறிய துவாரங்கள், கணினி வழிகாட்டல் ஆகியவை பயன்படுத்தப்படுகின்றன." ] },
+      "நரம்பியல் சத்திரசிகிச்சை நிபுணர்கள், மூளை, முண்ணாண், நரம்புகளில் சத்திரசிகிச்சை செய்யும் வைத்தியர்கள்.",
+      "மருத்துவப் படிப்புக்குப் பின்னரும், இவர்கள் பல ஆண்டுகள் மேலதிகப் பயிற்சி பெறுகிறார்கள்.",
+      "மூளைக் கட்டிகள், தலைக்காயங்கள், மண்டையோட்டுக்குள் இரத்தக்கசிவு ஆகியவற்றுக்கு இவர்கள் சிகிச்சை அளிக்கிறார்கள்.",
+      "வழுக்கிய முள்ளந்தண்டுத் தட்டுகள், முதுகுக் காயங்கள், அழுத்தப்பட்ட நரம்புகளுக்கும் சத்திரசிகிச்சை செய்கிறார்கள்.",
+      "மூளையினுள் திரவம் தேங்குவது போன்ற பிரச்சினைகளுக்குப் பிள்ளைகளுக்கும் சிகிச்சை அளிக்கப்படுகிறது.",
+      "சத்திரசிகிச்சைக்கு முன், CT, MRI ஸ்கான்கள் தலையின் உட்புறத்தைத் தெளிவாகக் காட்டுகின்றன.",
+      "இப்போது பல சத்திரசிகிச்சைகள் பெரிய வெட்டுகளுக்குப் பதிலாகச் சிறிய துவாரங்கள் மூலம் செய்யப்படுகின்றன.",
+      "சக்திவாய்ந்த நுணுக்குக்காட்டி, மிகச் சிறிய இரத்தக்குழாய்களையும் நரம்புகளையும் பார்க்க உதவுகிறது.",
+      "கணினி வழிகாட்டல் GPS போல, கருவிகள் சரியாக எங்கே உள்ளன என்பதைக் காட்டுகிறது.",
+      "சத்திரசிகிச்சையின்போது, முக்கிய நரம்புகள் சரியாக இயங்குகின்றனவா என்பதைக் கருவிகள் கண்காணிக்கின்றன.",
+      "சில மூளைச் சத்திரசிகிச்சைகள், மெல்லிய கமரா மூலம் மூக்கின் வழியாகச் செய்யப்படுகின்றன.",
+      "பல சத்திரசிகிச்சைகள் பல மணிநேரம் நீடிக்கின்றன; ஒரு பெரிய குழு இணைந்து பணியாற்றுகிறது.",
+      "சத்திரசிகிச்சைக்குப் பின், பல நோயாளிகள் தீவிர சிகிச்சைப் பிரிவில் கவனமாகக் கண்காணிக்கப்படுகிறார்கள்.",
+      "உடற்பயிற்சிச் சிகிச்சை, பல நோயாளிகள் மீண்டும் அன்றாட வாழ்க்கைக்குத் திரும்ப உதவுகிறது." ] },
     si: { title: "ස්නායු ශල්‍ය වෛද්‍යවරයෙක් කරන්නේ කුමක්ද?", lines: [
-      "ස්නායු ශල්‍ය වෛද්‍යවරුන් මොළයේ, සුෂුම්නාවේ සහ ශරීරයේ ස්නායුවල ශල්‍යකර්ම කරයි.",
-      "ඔවුන් ගෙඩි, හිසේ සහ කොඳු ඇට පෙළේ තුවාල, මොළයේ ලේ ගැලීම් සහ හිරවූ ස්නායු සඳහා ප්‍රතිකාර කරයි.",
-      "අද බොහෝ ශල්‍යකර්ම සඳහා අන්වීක්ෂ, කුඩා සිදුරු සහ පරිගණක මඟපෙන්වීම භාවිත කෙරේ." ] } },
+      "ස්නායු ශල්‍ය වෛද්‍යවරුන් යනු මොළය, සුෂුම්නාව සහ ස්නායු මත ශල්‍යකර්ම කරන වෛද්‍යවරුන් ය.",
+      "වෛද්‍ය උපාධියෙන් පසුවත්, ඔවුන් තවත් වසර ගණනාවක් විශේෂ පුහුණුව ලබයි.",
+      "ඔවුන් මොළයේ ගෙඩි, හිසේ තුවාල සහ හිස්කබල තුළ ලේ ගැලීම් සඳහා ප්‍රතිකාර කරයි.",
+      "කොඳු ඇට පෙළේ තැටි ලිස්සීම්, තුවාල සහ හිරවූ ස්නායු සඳහාද ඔවුන් ශල්‍යකර්ම කරයි.",
+      "මොළය තුළ තරලය එකතු වීම වැනි ගැටලු සඳහා දරුවන්ටද ප්‍රතිකාර කෙරේ.",
+      "ශල්‍යකර්මයට පෙර, CT සහ MRI ස්කෑන් මඟින් හිස ඇතුළත පැහැදිලිව පෙන්වයි.",
+      "අද බොහෝ ශල්‍යකර්ම විශාල කැපුම් වෙනුවට කුඩා සිදුරු හරහා සිදු කෙරේ.",
+      "බලවත් අන්වීක්ෂයක් ඉතා කුඩා රුධිර නාල සහ ස්නායු දැකීමට උපකාරී වේ.",
+      "පරිගණක මඟපෙන්වීම GPS මෙන්, උපකරණ හරියටම කොතැනද යන්න පෙන්වයි.",
+      "ශල්‍යකර්මය අතරතුර, වැදගත් ස්නායු නිසි ලෙස ක්‍රියා කරනවාදැයි යන්ත්‍ර මඟින් පරීක්ෂා කෙරේ.",
+      "සමහර මොළයේ ශල්‍යකර්ම, සිහින් කැමරාවක් භාවිතයෙන් නාසය හරහා සිදු කෙරේ.",
+      "බොහෝ ශල්‍යකර්ම පැය ගණනාවක් ගත වන අතර, විශාල කණ්ඩායමක් එකට වැඩ කරයි.",
+      "ශල්‍යකර්මයෙන් පසු, බොහෝ රෝගීන් දැඩි සත්කාර ඒකකයේ හොඳින් නිරීක්ෂණය කෙරේ.",
+      "භෞත චිකිත්සාව බොහෝ රෝගීන්ට නැවත එදිනෙදා ජීවිතයට පැමිණීමට උපකාරී වේ." ] } },
 
   // 02  original clip: https://youtu.be/ntX3r4DYpp8
-  { video: "videos/02.mp4", tag: "N", source: "Standard neurosurgical practice",
+  { video: "videos/02.mp4", tag: "N", length: "0:25", source: "Standard neurosurgical practice",
     en: { title: "Awake brain surgery", lines: [
-      "The brain itself has no pain receptors, so it cannot feel the surgeon's touch.",
-      "With the scalp numbed, some patients stay awake and talk during the operation.",
-      "This helps surgeons protect the areas for speech and movement while removing a tumour." ] },
+      "The brain has no pain sensors, so it cannot feel the surgeon's touch.",
+      "With the scalp numbed, some patients stay awake and talk.",
+      "This helps surgeons protect the areas for speech and movement." ] },
     ta: { title: "விழித்திருக்கும் நிலையில் மூளைச் சத்திரசிகிச்சை", lines: [
-      "மூளைக்கு வலியை உணரும் நரம்பு முனைகள் இல்லை; எனவே சத்திரசிகிச்சை நிபுணரின் தொடுகையை அது உணர்வதில்லை.",
-      "தலைத்தோல் விறைக்கச் செய்யப்பட்ட பின், சில நோயாளிகள் சத்திரசிகிச்சையின் போது விழித்திருந்து பேசுகிறார்கள்.",
-      "கட்டியை அகற்றும்போது பேச்சு மற்றும் அசைவுக்கான மூளைப் பகுதிகளைப் பாதுகாக்க இது உதவுகிறது." ] },
+      "மூளைக்கு வலியை உணரும் தன்மை இல்லை; எனவே தொடுகையை அது உணர்வதில்லை.",
+      "தலைத்தோலை விறைக்கச் செய்த பின், சில நோயாளிகள் விழித்திருந்து பேசுகிறார்கள்.",
+      "இதனால் பேச்சு, அசைவுக்கான மூளைப் பகுதிகளைப் பாதுகாக்க முடிகிறது." ] },
     si: { title: "අවදියෙන් සිටියදී මොළයේ ශල්‍යකර්ම", lines: [
-      "මොළයේ වේදනාව දැනෙන ප්‍රතිග්‍රාහක නැති නිසා, ශල්‍ය වෛද්‍යවරයාගේ ස්පර්ශය මොළයට දැනෙන්නේ නැත.",
-      "හිස්කබලේ සම හිරිවට්ටා, සමහර රෝගීන් ශල්‍යකර්මය අතරතුර අවදියෙන් සිට කතා කරයි.",
-      "ගෙඩියක් ඉවත් කරන විට කථනය සහ චලනය පාලනය කරන කොටස් ආරක්ෂා කිරීමට මෙය ශල්‍ය වෛද්‍යවරුන්ට උදව් වේ." ] } },
+      "මොළයට වේදනාව දැනෙන්නේ නැති නිසා, ශල්‍ය වෛද්‍යවරයාගේ ස්පර්ශය එයට නොදැනේ.",
+      "හිස්කබලේ සම හිරිවට්ටා, සමහර රෝගීන් අවදියෙන් සිට කතා කරයි.",
+      "මෙමඟින් කථනය සහ චලනය පාලනය කරන කොටස් ආරක්ෂා කළ හැකිය." ] } },
 
   // 03  original clip: https://youtu.be/CVML3Cjta5Y
-  { video: "videos/03.mp4", tag: "D", source: "Nobel Prize in Physiology or Medicine 2026",
+  { video: "videos/03.mp4", tag: "D", length: "1:07", source: "Nobel Prize in Physiology or Medicine 2026",
     en: { title: "Switching brain cells on and off with light", lines: [
       "The 2026 Nobel Prize in Medicine was awarded for optogenetics.",
-      "A light-sensitive protein from a tiny green alga is placed into nerve cells.",
-      "A flash of light can then switch chosen neurons on or off, showing what each circuit does." ] },
+      "It was shared by Karl Deisseroth, Peter Hegemann and Georg Nagel.",
+      "It began with a tiny green alga that swims towards light.",
+      "The alga has a protein that opens like a gate when light shines on it.",
+      "Scientists place this protein into chosen nerve cells, mostly in mice.",
+      "A flash of light can then switch those nerve cells on or off.",
+      "Labs worldwide use it to study brain diseases, and early trials test it to restore sight." ] },
     ta: { title: "ஒளியால் மூளைக் கலங்களை இயக்குதலும் நிறுத்துதலும்", lines: [
-      "2026 மருத்துவ நோபல் பரிசு, ஒளியால் கலங்களைக் கட்டுப்படுத்தும் ஒப்டோஜெனெட்டிக்ஸ் ஆய்வுக்கு வழங்கப்பட்டது.",
-      "ஒரு சிறிய பச்சைப் பாசியிலிருந்து பெறப்பட்ட, ஒளியை உணரும் புரதம் நரம்புக் கலங்களுக்குள் செலுத்தப்படுகிறது.",
-      "ஒளிக்கீற்று மூலம் தெரிவுசெய்த நரம்புக் கலங்களை இயக்கவோ நிறுத்தவோ முடியும்; இதனால் ஒவ்வொரு சுற்றின் வேலையும் தெரிகிறது." ] },
+      "2026 மருத்துவ நோபல் பரிசு, ஒப்டோஜெனெட்டிக்ஸ் ஆய்வுக்கு வழங்கப்பட்டது.",
+      "கார்ல் டைசரோத், பீட்டர் ஹெகமன், ஜோர்ஜ் நாகல் ஆகியோர் இதைப் பகிர்ந்துகொண்டனர்.",
+      "இது ஒளியை நோக்கி நீந்தும் ஒரு சிறிய பச்சைப் பாசியிலிருந்து தொடங்கியது.",
+      "அந்தப் பாசியில், ஒளி பட்டதும் வாயில் போலத் திறக்கும் ஒரு புரதம் உள்ளது.",
+      "விஞ்ஞானிகள் இந்தப் புரதத்தை, பெரும்பாலும் எலிகளில், தெரிவுசெய்த நரம்புக் கலங்களுக்குள் செலுத்துகிறார்கள்.",
+      "பின்னர் ஒரு ஒளிக்கீற்று அந்த நரம்புக் கலங்களை இயக்கவோ நிறுத்தவோ முடியும்.",
+      "உலகெங்கும் மூளை நோய்களை ஆராய இது பயன்படுகிறது; பார்வையை மீட்கவும் ஆரம்பச் சோதனைகள் நடைபெறுகின்றன." ] },
     si: { title: "ආලෝකයෙන් මොළයේ සෛල ක්‍රියාත්මක කිරීම සහ නැවැත්වීම", lines: [
-      "2026 වෛද්‍ය විද්‍යාව සඳහා වූ නොබෙල් ත්‍යාගය ඔප්ටොජෙනටික්ස් (ආලෝකයෙන් සෛල පාලනය) සඳහා පිරිනැමිණි.",
-      "කුඩා කොළ පැහැති ඇල්ගාවකින් ලබාගත් ආලෝකයට සංවේදී ප්‍රෝටීනයක් ස්නායු සෛල තුළට ඇතුළු කෙරේ.",
-      "ඉන්පසු ආලෝක දැල්වීමකින් තෝරාගත් ස්නායු සෛල ක්‍රියාත්මක කිරීමට හෝ නැවැත්වීමට හැකි අතර, එක් එක් පරිපථය කරන්නේ කුමක්දැයි එයින් පෙනේ." ] } },
+      "2026 වෛද්‍ය විද්‍යාව සඳහා නොබෙල් ත්‍යාගය ඔප්ටොජෙනටික්ස් සඳහා පිරිනැමිණි.",
+      "කාල් ඩයිසෙරොත්, පීටර් හෙගමාන් සහ ජෝර්ජ් නාගල් එය බෙදා ගත්හ.",
+      "මෙය ආරම්භ වූයේ ආලෝකය දෙසට පිහිනන කුඩා කොළ පැහැති ඇල්ගාවකිනි.",
+      "එම ඇල්ගාවේ, ආලෝකය වැටුණු විට දොරටුවක් මෙන් විවෘත වන ප්‍රෝටීනයක් ඇත.",
+      "විද්‍යාඥයන් මෙම ප්‍රෝටීනය, බොහෝ විට මීයන්ගේ, තෝරාගත් ස්නායු සෛල තුළට ඇතුළු කරයි.",
+      "ඉන්පසු ආලෝක දැල්වීමකින් එම ස්නායු සෛල ක්‍රියාත්මක කිරීමට හෝ නැවැත්වීමට හැකිය.",
+      "ලොව පුරා මොළයේ රෝග අධ්‍යයනයට මෙය භාවිත වන අතර, පෙනීම යළි ලබා දීමට මුල් පරීක්ෂණද සිදු වේ." ] } },
 
   // 04  original clip: https://youtu.be/fS4Hb8qjiOU
-  { video: "videos/04.mp4", tag: "D", source: "Card et al., Nature Medicine, June 2026",
+  { video: "videos/04.mp4", tag: "D", length: "0:40", source: "Card et al., Nature Medicine, June 2026",
     en: { title: "Talking through a brain implant, at home", lines: [
       "A man with ALS could no longer speak clearly or use his hands.",
-      "Tiny electrodes in his brain's speech area read the signals as he tried to speak.",
-      "A computer turned them into text, and he used it at home for almost two years." ] },
+      "Tiny electrodes were placed in the speech area of his brain.",
+      "As he tried to speak, a computer turned his brain signals into text on a screen.",
+      "He used it at home for almost two years to talk with his family and others." ] },
     ta: { title: "மூளையில் பொருத்திய கருவி மூலம் வீட்டிலிருந்தே பேசுதல்", lines: [
       "ALS நோயால் பாதிக்கப்பட்ட ஒருவரால் தெளிவாகப் பேசவோ கைகளைப் பயன்படுத்தவோ முடியவில்லை.",
-      "அவர் பேச முயன்றபோது, அவரது மூளையின் பேச்சுப் பகுதியில் வைக்கப்பட்ட மிகச் சிறிய மின்முனைகள் சமிக்ஞைகளை வாசித்தன.",
-      "ஒரு கணினி அவற்றை எழுத்துகளாக மாற்றியது; அவர் கிட்டத்தட்ட இரண்டு ஆண்டுகள் வீட்டில் அதைப் பயன்படுத்தினார்." ] },
+      "அவரது மூளையின் பேச்சுப் பகுதியில் மிகச் சிறிய மின்முனைகள் வைக்கப்பட்டன.",
+      "அவர் பேச முயன்றபோது, கணினி அவரது மூளைச் சமிக்ஞைகளைத் திரையில் எழுத்துகளாக மாற்றியது.",
+      "குடும்பத்தினருடனும் மற்றவர்களுடனும் பேச, அவர் கிட்டத்தட்ட இரண்டு ஆண்டுகள் வீட்டில் அதைப் பயன்படுத்தினார்." ] },
     si: { title: "මොළයේ සවි කළ උපකරණයකින් නිවසේදීම කතා කිරීම", lines: [
-      "ALS රෝගයෙන් පෙළුණු පුද්ගලයෙකුට පැහැදිලිව කතා කිරීමට හෝ අත් භාවිත කිරීමට තවදුරටත් නොහැකි විය.",
-      "ඔහු කතා කිරීමට උත්සාහ කරන විට, මොළයේ කථන කොටසේ තැබූ ඉතා කුඩා ඉලෙක්ට්‍රෝඩ එම සංඥා කියවීය.",
-      "පරිගණකයක් ඒවා අකුරු බවට පරිවර්තනය කළ අතර, ඔහු එය වසර දෙකකට ආසන්න කාලයක් නිවසේදී භාවිත කළේය." ] } },
+      "ALS රෝගයෙන් පෙළුණු පුද්ගලයෙකුට පැහැදිලිව කතා කිරීමට හෝ අත් භාවිත කිරීමට නොහැකි විය.",
+      "ඔහුගේ මොළයේ කථන කොටසේ ඉතා කුඩා ඉලෙක්ට්‍රෝඩ තැබිණි.",
+      "ඔහු කතා කිරීමට උත්සාහ කරන විට, පරිගණකයක් මොළයේ සංඥා තිරයේ අකුරු බවට පත් කළේය.",
+      "පවුලේ අය සහ අනෙක් අය සමඟ කතා කිරීමට, ඔහු එය වසර දෙකකට ආසන්න කාලයක් නිවසේදී භාවිත කළේය." ] } },
 
   // 05  original clip: https://youtu.be/vcnPY3Y6DN4
-  { video: "videos/05.mp4", tag: "N", source: "5-ALA Phase III glioma trial",
+  { video: "videos/05.mp4", tag: "N", length: "0:33", source: "5-ALA Phase III glioma trial",
     en: { title: "Making brain tumours glow pink", lines: [
       "Hours before surgery, the patient drinks a natural compound called 5-ALA.",
-      "Tumour cells collect it, and under blue light the tumour glows pink.",
-      "In a major trial, complete removal of the tumour rose from 35% to 65% of patients." ] },
+      "Tumour cells take up much more of it than healthy brain cells.",
+      "Under blue light in the microscope, the tumour glows pink, showing its edges.",
+      "In a major trial, complete removal rose from 35% to 65% of patients." ] },
     ta: { title: "மூளைக் கட்டிகளை இளஞ்சிவப்பாக ஒளிரச் செய்தல்", lines: [
-      "சத்திரசிகிச்சைக்குச் சில மணிநேரங்களுக்கு முன், நோயாளி 5-ALA எனப்படும் இயற்கைச் சேர்வையைக் குடிக்கிறார்.",
-      "கட்டிக் கலங்கள் அதைச் சேமித்துக்கொள்கின்றன; நீல ஒளியில் கட்டி இளஞ்சிவப்பாக ஒளிர்கிறது.",
-      "ஒரு முக்கிய ஆய்வில், கட்டி முழுமையாக அகற்றப்பட்ட நோயாளிகளின் வீதம் 35% இலிருந்து 65% ஆக உயர்ந்தது." ] },
+      "சத்திரசிகிச்சைக்குச் சில மணிநேரங்களுக்கு முன், நோயாளி 5-ALA எனும் இயற்கைச் சேர்வையைக் குடிக்கிறார்.",
+      "ஆரோக்கியமான மூளைக் கலங்களை விடக் கட்டிக் கலங்கள் அதை அதிகமாக உள்ளெடுக்கின்றன.",
+      "நுணுக்குக்காட்டியின் நீல ஒளியில் கட்டி இளஞ்சிவப்பாக ஒளிர்ந்து, அதன் எல்லையைக் காட்டுகிறது.",
+      "ஒரு முக்கிய ஆய்வில், கட்டி முழுமையாக அகற்றப்பட்டோர் 35% இலிருந்து 65% ஆக உயர்ந்தனர்." ] },
     si: { title: "මොළයේ ගෙඩි රෝස පැහැයෙන් දිලිසෙන්නට සැලැස්වීම", lines: [
       "ශල්‍යකර්මයට පැය කිහිපයකට පෙර, රෝගියා 5-ALA නම් ස්වාභාවික සංයෝගයක් පානය කරයි.",
-      "ගෙඩියේ සෛල එය එකතු කර ගන්නා අතර, නිල් ආලෝකය යටතේ ගෙඩිය රෝස පැහැයෙන් දිලිසේ.",
-      "ප්‍රධාන පර්යේෂණයකදී, ගෙඩිය සම්පූර්ණයෙන් ඉවත් කළ රෝගීන්ගේ ප්‍රතිශතය 35% සිට 65% දක්වා ඉහළ ගියේය." ] } },
+      "නිරෝගී මොළයේ සෛලවලට වඩා ගෙඩියේ සෛල එය වැඩියෙන් උරා ගනී.",
+      "අන්වීක්ෂයේ නිල් ආලෝකය යටතේ ගෙඩිය රෝස පැහැයෙන් දිලිසෙමින් එහි සීමාව පෙන්වයි.",
+      "ප්‍රධාන පර්යේෂණයකදී, ගෙඩිය සම්පූර්ණයෙන් ඉවත් කළ රෝගීන් 35% සිට 65% දක්වා ඉහළ ගියේය." ] } },
 
   // 06  original clip: https://youtu.be/XNk3UF488mg
-  { video: "videos/06.mp4", tag: "N", source: "MR-guided focused ultrasound",
+  { video: "videos/06.mp4", tag: "N", length: "0:44", source: "MR-guided focused ultrasound",
     en: { title: "Treating tremor without a single cut", lines: [
+      "Essential tremor makes the hands shake, so writing or drinking becomes hard.",
       "About a thousand ultrasound beams meet at one tiny point deep in the brain.",
-      "MRI guides the aim and checks the temperature as the treatment happens.",
-      "The heat seals a pin-sized spot that drives the shaking, with no incision or implant." ] },
+      "MRI guides the aim and checks the temperature during treatment.",
+      "The heat seals a pin-sized spot that drives the shaking.",
+      "There is no cut and no implant, and many patients go home the next day." ] },
     ta: { title: "ஒரு வெட்டும் இல்லாமல் நடுக்கத்துக்குச் சிகிச்சை", lines: [
-      "சுமார் ஆயிரம் அல்ட்ராசவுண்ட் கதிர்கள் மூளையின் ஆழத்தில் உள்ள ஒரு சிறிய புள்ளியில் சந்திக்கின்றன.",
-      "சிகிச்சை நடைபெறும்போது MRI இலக்கைச் சரியாக வழிநடத்தி, வெப்பநிலையையும் கண்காணிக்கிறது.",
-      "அந்த வெப்பம் நடுக்கத்தை உண்டாக்கும் குண்டூசி அளவான இடத்தைச் செயலிழக்கச் செய்கிறது; வெட்டோ பொருத்தும் கருவியோ தேவையில்லை." ] },
+      "நடுக்க நோய் கைகளை நடுங்கச் செய்வதால், எழுதுவதும் குடிப்பதும் கடினமாகிறது.",
+      "சுமார் ஆயிரம் அல்ட்ராசவுண்ட் கதிர்கள் மூளையின் ஆழத்தில் ஒரு சிறிய புள்ளியில் சந்திக்கின்றன.",
+      "சிகிச்சையின்போது MRI இலக்கைச் சரியாக வழிநடத்தி, வெப்பநிலையையும் கண்காணிக்கிறது.",
+      "அந்த வெப்பம், நடுக்கத்தை உண்டாக்கும் குண்டூசி அளவான இடத்தைச் செயலிழக்கச் செய்கிறது.",
+      "வெட்டோ பொருத்தும் கருவியோ இல்லை; பல நோயாளிகள் மறுநாளே வீடு திரும்புகிறார்கள்." ] },
     si: { title: "එක කැපුමක්වත් නැතිව වෙව්ලීමට ප්‍රතිකාර", lines: [
-      "අල්ට්‍රාසවුන්ඩ් කිරණ දහසක් පමණ මොළයේ ගැඹුරේ ඇති එක් ඉතා කුඩා ලක්ෂ්‍යයකට එක්වේ.",
-      "ප්‍රතිකාරය සිදුවන අතරතුර MRI මඟින් ඉලක්කය මෙහෙයවන අතර උෂ්ණත්වයද පරීක්ෂා කරයි.",
-      "එම තාපය වෙව්ලීම ඇති කරන අල්පෙනෙත්තක තරම් කුඩා ස්ථානයක් අක්‍රිය කරයි; කැපුමක් හෝ සවි කරන උපකරණයක් අවශ්‍ය නැත." ] } },
+      "වෙව්ලීමේ රෝගය නිසා අත් වෙව්ලන බැවින්, ලිවීම හෝ බීම අපහසු වේ.",
+      "අල්ට්‍රාසවුන්ඩ් කිරණ දහසක් පමණ මොළයේ ගැඹුරේ එක් ඉතා කුඩා ලක්ෂ්‍යයකට එක්වේ.",
+      "ප්‍රතිකාරය අතරතුර MRI මඟින් ඉලක්කය මෙහෙයවන අතර උෂ්ණත්වයද පරීක්ෂා කරයි.",
+      "එම තාපය, වෙව්ලීම ඇති කරන අල්පෙනෙත්තක තරම් කුඩා ස්ථානයක් අක්‍රිය කරයි.",
+      "කැපුමක් හෝ සවි කරන උපකරණයක් නැත; බොහෝ රෝගීන් පසුදිනම නිවසට යති." ] } },
 
   // 07  original clip: https://youtu.be/3FZd3SBj-mc
-  { video: "videos/07.mp4", tag: "N", source: "Textbook neurosurgery",
+  { video: "videos/07.mp4", tag: "N", length: "0:40", source: "Textbook neurosurgery",
     en: { title: "Cut nerves can grow back", lines: [
+      "Nerves carry messages between the brain and the body, like electric cables.",
       "Nerves in the arms and legs can slowly regrow after an injury.",
       "They grow about one millimetre a day, so recovery can take many months.",
-      "Surgeons join cut nerves with stitches finer than a hair, under a microscope." ] },
+      "Surgeons join cut nerves with stitches finer than a hair, under a microscope.",
+      "If a piece is missing, a nerve from elsewhere in the body can bridge the gap." ] },
     ta: { title: "வெட்டுப்பட்ட நரம்புகள் மீண்டும் வளரலாம்", lines: [
-      "கைகள் மற்றும் கால்களிலுள்ள நரம்புகள் காயத்துக்குப் பின் மெதுவாக மீண்டும் வளரக்கூடியவை.",
-      "அவை நாளொன்றுக்குச் சுமார் ஒரு மில்லிமீற்றர் மட்டுமே வளர்வதால், குணமடையப் பல மாதங்கள் ஆகலாம்.",
-      "நுணுக்குக்காட்டியின் கீழ், தலைமுடியை விட மெல்லிய தையல்களால் வெட்டுப்பட்ட நரம்புகளை நிபுணர்கள் இணைக்கிறார்கள்." ] },
+      "நரம்புகள், மின்கம்பிகள் போல, மூளைக்கும் உடலுக்கும் இடையே செய்திகளைக் கொண்டு செல்கின்றன.",
+      "கைகள், கால்களிலுள்ள நரம்புகள் காயத்துக்குப் பின் மெதுவாக மீண்டும் வளரக்கூடியவை.",
+      "அவை நாளொன்றுக்குச் சுமார் ஒரு மில்லிமீற்றர் வளர்வதால், குணமடையப் பல மாதங்கள் ஆகலாம்.",
+      "நுணுக்குக்காட்டியின் கீழ், தலைமுடியை விட மெல்லிய தையல்களால் வெட்டுப்பட்ட நரம்புகள் இணைக்கப்படுகின்றன.",
+      "ஒரு பகுதி இல்லையெனில், உடலின் வேறோர் இடத்திலிருந்து எடுத்த நரம்புத் துண்டு இடைவெளியை நிரப்பும்." ] },
     si: { title: "කැපුණු ස්නායු නැවත වැඩිය හැකියි", lines: [
+      "ස්නායු, විදුලි රැහැන් මෙන්, මොළය සහ ශරීරය අතර පණිවිඩ ගෙන යයි.",
       "අත් පාවල ස්නායු තුවාලයකින් පසු සෙමින් නැවත වැඩිය හැකිය.",
       "ඒවා දිනකට මිලිමීටරයක් පමණ වැඩෙන නිසා, සුවය ලැබීමට මාස ගණනාවක් ගත විය හැකිය.",
-      "ශල්‍ය වෛද්‍යවරුන් අන්වීක්ෂයක් යටතේ, හිසකෙසකට වඩා සිහින් මැහුම්වලින් කැපුණු ස්නායු එකට යා කරයි." ] } },
+      "අන්වීක්ෂයක් යටතේ, හිසකෙසකට වඩා සිහින් මැහුම්වලින් කැපුණු ස්නායු එකට යා කෙරේ.",
+      "කොටසක් නැති නම්, ශරීරයේ වෙනත් තැනකින් ගත් ස්නායු කැබැල්ලකින් හිඩැස පුරවයි." ] } },
 
   // 08  original clip: https://youtu.be/lK1PMed9D88
-  { video: "videos/08.mp4", tag: "N", source: "Saver, Stroke 2006; mechanical thrombectomy",
+  { video: "videos/08.mp4", tag: "N", length: "1:11", source: "Saver, Stroke 2006; mechanical thrombectomy",
     en: { title: "Pulling a clot out of the brain", lines: [
-      "In a stroke, the brain can lose about 1.9 million nerve cells every minute.",
-      "Doctors can pass a thin tube from the groin up to the brain and pull the clot out.",
+      "Most strokes happen when a blood clot blocks blood flow to part of the brain.",
+      "Warning signs: a drooping face, a weak arm, or difficulty speaking.",
+      "If you see these signs, call 1990 Suwa Seriya at once. Every minute counts.",
+      "During a stroke, the brain can lose about 1.9 million nerve cells every minute.",
+      "A brain scan shows where the clot is.",
+      "Doctors pass a thin tube from the groin or wrist up to the brain.",
+      "A tiny device grabs the clot and pulls it out, restoring blood flow.",
       "The sooner treatment starts, the more of the brain is saved." ] },
     ta: { title: "மூளையிலிருந்து இரத்த உறைவை வெளியே இழுத்தல்", lines: [
-      "பாரிசவாதத்தின் போது, மூளை ஒவ்வொரு நிமிடமும் சுமார் 19 இலட்சம் நரம்புக் கலங்களை இழக்கக்கூடும்.",
-      "வைத்தியர்கள் இடுப்புப் பகுதியிலிருந்து மூளை வரை ஒரு மெல்லிய குழாயைச் செலுத்தி, உறைவை வெளியே இழுக்க முடியும்.",
+      "பெரும்பாலான பாரிசவாதங்கள், இரத்த உறைவு மூளையின் ஒரு பகுதிக்கான இரத்த ஓட்டத்தைத் தடுப்பதால் ஏற்படுகின்றன.",
+      "அறிகுறிகள்: முகம் ஒரு பக்கம் சாய்தல், கை பலவீனம், பேசுவதில் சிரமம்.",
+      "இவற்றைக் கண்டால் உடனே 1990 சுவசெரிய அம்புலன்ஸை அழையுங்கள். ஒவ்வொரு நிமிடமும் முக்கியம்.",
+      "பாரிசவாதத்தின் போது, மூளை ஒவ்வொரு நிமிடமும் சுமார் 19 இலட்சம் நரம்புக் கலங்களை இழக்கலாம்.",
+      "மூளை ஸ்கான் மூலம் உறைவு எங்கே உள்ளது என்பது கண்டறியப்படுகிறது.",
+      "வைத்தியர்கள் இடுப்பு அல்லது மணிக்கட்டிலிருந்து மூளை வரை ஒரு மெல்லிய குழாயைச் செலுத்துகிறார்கள்.",
+      "ஒரு சிறிய கருவி உறைவைப் பிடித்து வெளியே இழுத்து, இரத்த ஓட்டத்தை மீட்கிறது.",
       "சிகிச்சை எவ்வளவு விரைவாகத் தொடங்குகிறதோ, அவ்வளவு அதிகமான மூளைப் பகுதி காப்பாற்றப்படும்." ] },
     si: { title: "මොළයේ ලේ කැටියක් පිටතට ඇද ගැනීම", lines: [
+      "බොහෝ ආඝාත ඇති වන්නේ ලේ කැටියක් මොළයේ කොටසකට රුධිරය ගලා යාම අවහිර කළ විටය.",
+      "අනතුරු ලකුණු: මුහුණ එක් පැත්තකට ඇද වීම, අතක දුර්වලකම, කතා කිරීමේ අපහසුව.",
+      "මෙම ලකුණු දුටුවොත් වහාම 1990 සුවසැරිය අමතන්න. සෑම මිනිත්තුවක්ම වැදගත්.",
       "ආඝාතයකදී, මොළයට සෑම මිනිත්තුවකම ස්නායු සෛල මිලියන 1.9ක් පමණ අහිමි විය හැකිය.",
-      "වෛද්‍යවරුන්ට කලවා මුල සිට මොළය දක්වා සිහින් නළයක් යවා ලේ කැටිය පිටතට ඇද ගත හැකිය.",
+      "මොළයේ ස්කෑන් පරීක්ෂණයකින් ලේ කැටිය ඇති තැන සොයා ගනී.",
+      "වෛද්‍යවරුන් කලවා මුල හෝ මැණික් කටුවේ සිට මොළය දක්වා සිහින් නළයක් යවයි.",
+      "කුඩා උපකරණයක් ලේ කැටිය අල්ලා පිටතට ඇද, රුධිර ගැලීම යළි ලබා දෙයි.",
       "ප්‍රතිකාර කොතරම් ඉක්මනින් ආරම්භ කරනවාද, මොළයේ ඒ තරම් වැඩි කොටසක් බේරා ගත හැකිය." ] } },
 
   // 09  original clip: https://youtu.be/UHDfvfYCY0U
-  { video: "videos/09.mp4", tag: "D", source: "MICrONS Consortium, Nature, April 2025",
+  { video: "videos/09.mp4", tag: "D", length: "0:44", source: "MICrONS Consortium, Nature, April 2025",
     en: { title: "A grain-sized piece of brain, fully wired", lines: [
-      "Scientists mapped one cubic millimetre of mouse brain, about the size of a grain of sand.",
+      "Scientists mapped one cubic millimetre of mouse brain, the size of a grain of sand.",
+      "First, they recorded the cells' activity while the mouse watched videos.",
+      "Then the tissue was cut into thousands of ultra-thin slices and photographed.",
       "It held over 200,000 cells, 523 million connections and about 4 km of wiring.",
-      "The map shows how brain cells are wired and what they do when the mouse sees." ] },
+      "The map shows how brain cells are wired and work together when the mouse sees." ] },
     ta: { title: "மணல் துகள் அளவு மூளைப் பகுதியின் முழு இணைப்பு வரைபடம்", lines: [
-      "ஒரு மணல் துகள் அளவான, ஒரு கன மில்லிமீற்றர் எலி மூளையை விஞ்ஞானிகள் முழுமையாக வரைபடமாக்கினர்.",
-      "அதில் 2 இலட்சத்துக்கும் மேற்பட்ட கலங்கள், 52.3 கோடி இணைப்புகள், சுமார் 4 கி.மீ. நீளமான நரம்பு இழைகள் இருந்தன.",
-      "எலி பார்க்கும்போது மூளைக் கலங்கள் எவ்வாறு இணைந்துள்ளன, அவை என்ன செய்கின்றன என்பதை இந்த வரைபடம் காட்டுகிறது." ] },
+      "விஞ்ஞானிகள், மணல் துகள் அளவான ஒரு கன மில்லிமீற்றர் எலி மூளையை வரைபடமாக்கினர்.",
+      "முதலில், எலி வீடியோக்களைப் பார்க்கும்போது கலங்களின் செயற்பாட்டைப் பதிவுசெய்தனர்.",
+      "பின்னர் அந்த இழையம் ஆயிரக்கணக்கான மிக மெல்லிய துண்டுகளாக வெட்டிப் படமாக்கப்பட்டது.",
+      "அதில் 2 இலட்சத்துக்கும் மேற்பட்ட கலங்கள், 52.3 கோடி இணைப்புகள், சுமார் 4 கி.மீ. நரம்பு இழைகள் இருந்தன.",
+      "எலி பார்க்கும்போது மூளைக் கலங்கள் எவ்வாறு இணைந்து செயற்படுகின்றன என்பதை இந்த வரைபடம் காட்டுகிறது." ] },
     si: { title: "වැලි කැටයක තරම් මොළ කොටසක සම්පූර්ණ රැහැන් සිතියම", lines: [
-      "විද්‍යාඥයන් මීයෙකුගේ මොළයේ ඝන මිලිමීටරයක්, එනම් වැලි කැටයක පමණ ප්‍රමාණයක්, සිතියම්ගත කළහ.",
-      "එහි සෛල 200,000කට වඩා, සම්බන්ධතා මිලියන 523ක් සහ කිලෝමීටර 4ක් පමණ දිග ස්නායු රැහැන් තිබුණි.",
-      "මීයා යමක් දකින විට මොළයේ සෛල සම්බන්ධ වී ඇති ආකාරය සහ ඒවා කරන දේ මෙම සිතියමෙන් පෙන්වයි." ] } },
+      "විද්‍යාඥයන්, වැලි කැටයක තරම් මීයෙකුගේ මොළයේ ඝන මිලිමීටරයක් සිතියම්ගත කළහ.",
+      "පළමුව, මීයා වීඩියෝ නරඹන අතරතුර සෛලවල ක්‍රියාකාරිත්වය වාර්තා කළහ.",
+      "ඉන්පසු එම පටකය ඉතා සිහින් පෙති දහස් ගණනකට කපා ඡායාරූප ගත කෙරිණි.",
+      "එහි සෛල 200,000කට වඩා, සම්බන්ධතා මිලියන 523ක් සහ කිලෝමීටර 4ක් පමණ ස්නායු රැහැන් තිබුණි.",
+      "මීයා දකින විට මොළයේ සෛල සම්බන්ධ වී එකට ක්‍රියා කරන ආකාරය මෙම සිතියමෙන් පෙන්වයි." ] } },
 
   // 10  original clip: https://youtu.be/1LHcdFRx47c
-  { video: "videos/10.mp4", tag: "D", source: "EPFL / CHUV Switzerland, Nature",
-    en: { title: "Walking again after paralysis", lines: [
-      "Electrodes over the lower spinal cord send pulses timed to each step.",
-      "They copy the signals the brain would normally send to the leg muscles.",
-      "People paralysed for years walked with support, and some improved even with it switched off." ] },
-    ta: { title: "உடல் செயலிழப்புக்குப் பின் மீண்டும் நடத்தல்", lines: [
-      "முண்ணாணின் கீழ்ப் பகுதியில் வைக்கப்பட்ட மின்முனைகள், ஒவ்வொரு அடியுடனும் ஒத்திசைந்த மின் துடிப்புகளை அனுப்புகின்றன.",
-      "மூளை வழக்கமாகக் கால் தசைகளுக்கு அனுப்பும் சமிக்ஞைகளை அவை பின்பற்றுகின்றன.",
-      "பல ஆண்டுகளாகச் செயலிழந்திருந்தவர்கள் உதவியுடன் நடந்தனர்; சிலர் கருவியை நிறுத்திய நிலையிலும் முன்னேற்றம் கண்டனர்." ] },
-    si: { title: "අංශභාගයෙන් පසු නැවත ඇවිදීම", lines: [
-      "සුෂුම්නාවේ පහළ කොටස මත තැබූ ඉලෙක්ට්‍රෝඩ, එක් එක් පියවරට ගැළපෙන සේ ස්පන්දන යවයි.",
-      "සාමාන්‍යයෙන් මොළය කකුල් මාංශ පේශිවලට යවන සංඥා ඒවා අනුකරණය කරයි.",
-      "වසර ගණනාවක් අංශභාගයෙන් සිටි අය ආධාර සහිතව ඇවිද ගිය අතර, සමහරුන් උපකරණය නිවා දැමූ විටත් දියුණුවක් පෙන්වූහ." ] } }
+  { video: "videos/10.mp4", tag: "D", length: "0:45", source: "Feinstein Institutes, Northwell Health; Nature Medicine",
+    en: { title: "Moving and feeling again with a double neural bypass", lines: [
+      "A diving accident damaged a man's spinal cord, leaving him unable to move or feel his hands.",
+      "Surgeons placed five tiny chips in the movement and touch areas of his brain.",
+      "A computer reads his wish to move and sends signals to his spine and arm muscles.",
+      "Sensors on his fingers send touch back to his brain, so he can feel again.",
+      "He can now lift a cup and drink by himself, and some gains remain with the system off." ] },
+    ta: { title: "இரட்டை நரம்புப் பாதை மூலம் மீண்டும் அசைவும் உணர்வும்", lines: [
+      "நீரில் குதித்தபோது ஏற்பட்ட விபத்தால் ஒருவரின் முண்ணாண் சேதமடைந்து, கைகளை அசைக்கவோ உணரவோ முடியவில்லை.",
+      "அவரது மூளையின் அசைவு மற்றும் தொடுகைப் பகுதிகளில் ஐந்து சிறிய சில்லுகள் பொருத்தப்பட்டன.",
+      "அவர் அசைய நினைப்பதைக் கணினி வாசித்து, முண்ணாணுக்கும் கைத் தசைகளுக்கும் சமிக்ஞைகளை அனுப்புகிறது.",
+      "விரல்களிலுள்ள உணரிகள் தொடுகையை மீண்டும் மூளைக்கு அனுப்புவதால், அவரால் மீண்டும் உணர முடிகிறது.",
+      "இப்போது அவர் தானே கோப்பையைத் தூக்கிக் குடிக்கிறார்; கருவியை நிறுத்தினாலும் சில முன்னேற்றங்கள் நீடிக்கின்றன." ] },
+    si: { title: "ද්විත්ව ස්නායු මාර්ගයකින් නැවත චලනය සහ සංවේදනය", lines: [
+      "කිමිදීමේ අනතුරකින් පුද්ගලයෙකුගේ සුෂුම්නාවට හානි වී, ඔහුට අත් සෙලවීමට හෝ දැනීමට නොහැකි විය.",
+      "ශල්‍ය වෛද්‍යවරුන් ඔහුගේ මොළයේ චලනය සහ ස්පර්ශය පාලනය කරන කොටස්වල කුඩා චිප පහක් සවි කළහ.",
+      "ඔහු චලනය වීමට සිතන දේ පරිගණකයක් කියවා, සුෂුම්නාවට සහ අතේ මාංශ පේශිවලට සංඥා යවයි.",
+      "ඇඟිලිවල ඇති සංවේදක ස්පර්ශය නැවත මොළයට යවන නිසා, ඔහුට නැවත දැනීම ලැබේ.",
+      "දැන් ඔහුට තනිවම කෝප්පයක් ඔසවා බීමට හැකි අතර, උපකරණය නිවා දැමූ විටත් සමහර දියුණුව පවතී." ] } }
 ];
 
 /* ===================== SETTINGS (safe to change) ===================== */
@@ -563,6 +657,9 @@ var SETTINGS = {
   sentenceSeconds: 6.5,      // normal time each subtitle sentence stays on screen
   extraSecondsPerChar: 0.04, // longer sentences stay longer (per letter above 80)
   maxSentenceSeconds: 11,
+  // reading speed used to share out the time on slides with a "length"
+  // (letters per second, plus about 1 second to notice each new sentence)
+  readingCharsPerSecond: { en: 13, ta: 15, si: 15 },
   sideCardVideos: true,      // false = side cards show a colour card instead of video
                              //         (use this if the TV becomes slow or jerky)
   cursorHideSeconds: 3
@@ -815,6 +912,69 @@ var SETTINGS = {
       }
     }, ms);
   }
+  /* ---------- slides with a "length": subtitles follow the video ---------- */
+  function lengthSeconds(v) {
+    if (typeof v === "number") { return v; }
+    var p = String(v).split(":");
+    return p.length > 1 ? parseInt(p[0], 10) * 60 + parseFloat(p[1]) : parseFloat(p[0]);
+  }
+  // when (in seconds of video) each sentence appears; the same for every
+  // language, so the subtitles match the video whatever language is chosen
+  function planCues(slide) {
+    var L = lengthSeconds(slide.length), first = 1.0, endGap = 0.4;
+    var n = slide.en.lines.length, need = [], total = 0, i, j, l;
+    var langs = ["en", "ta", "si"];
+    for (i = 0; i < n; i++) {
+      var w = 3.5;
+      for (j = 0; j < langs.length; j++) {
+        l = langs[j];
+        var text = slide[l] && slide[l].lines[i] ? slide[l].lines[i] : "";
+        w = Math.max(w, 1 + text.length / (SETTINGS.readingCharsPerSecond[l] || 13));
+      }
+      need.push(w); total += w;
+    }
+    var cues = [], t = first, avail = L - first - endGap;
+    for (i = 0; i < n; i++) { cues.push(t); t += avail * need[i] / total; }
+    return cues;
+  }
+  function showTimedLine(k, first) {
+    var lines = SLIDES[current][lang].lines;
+    lineIndex = k;
+    if (first) {
+      sentenceEl.innerHTML = lines[k] || ""; fitSentence(); addClass(sentenceEl, "show");
+      return;
+    }
+    removeClass(sentenceEl, "show");
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(function () {
+      sentenceEl.innerHTML = lines[k] || ""; fitSentence(); addClass(sentenceEl, "show");
+    }, 350);
+  }
+  function startTimedSubtitles() {
+    var slide = SLIDES[current], L = lengthSeconds(slide.length), cues = planCues(slide);
+    var v = cards[current].video, t0 = new Date().getTime(), lastT = 0, usingVideo = false, shown = -1;
+    barEl.style.webkitTransition = "width 0.25s linear"; barEl.style.transition = "width 0.25s linear";
+    function tick() {
+      if (mode !== "slides") { return; }
+      var wall = (new Date().getTime() - t0) / 1000 + 0.9;
+      var videoOk = !missing[current] && v.getAttribute("src") && v.readyState >= 2;
+      var t = wall;
+      if (videoOk) {
+        t = v.currentTime;
+        if (!usingVideo) { usingVideo = true; lastT = t; }
+        if (t < lastT - 1 || v.ended) { nextSlide(true); return; }   // the video reached its end
+      }
+      lastT = t;
+      if (t >= L - 0.15 || wall > L + 15) { nextSlide(true); return; }
+      var idx = 0;
+      for (var i = 0; i < cues.length; i++) { if (cues[i] <= t) { idx = i; } }
+      if (idx !== shown) { showTimedLine(idx, shown < 0); shown = idx; }
+      barEl.style.width = Math.min(100, t / L * 100) + "%";
+      timer = setTimeout(tick, 200);
+    }
+    tick();
+  }
+
   function startSubtitles() {
     var s = SLIDES[current], t = s[lang];
     removeClass(band, "show");
@@ -827,7 +987,7 @@ var SETTINGS = {
       sourceEl.innerHTML = "Source: " + s.source;
       counterEl.innerHTML = (current + 1) + " / " + N;
       addClass(band, "show");
-      showLine(0);
+      if (s.length) { startTimedSubtitles(); } else { showLine(0); }
     }, 900);
   }
 
