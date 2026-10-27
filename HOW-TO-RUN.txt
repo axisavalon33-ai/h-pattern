@@ -12,7 +12,8 @@ CHECK THE FOLDER LOOKS LIKE THIS
   index.html
   start-tv.bat           (Windows)
   start-tv.sh            (Mac / Linux)
-  start-kiosk.bat        (Windows, touch screen locked full screen)
+  start-kiosk.bat        (Windows/OPS: opens the screen locked full screen,
+                          no Python needed)
   fonts\                 (font files - do not delete)
   images\background.jpg
   videos\menu.mp4
@@ -127,13 +128,23 @@ HOW VISITORS CHOOSE A LANGUAGE (the TV is not a touch screen)
       or tap a side card. Tap the "< Language" button (top-left) to go
       back to the menu.
 
-TOUCH SCREEN CONNECTED TO THE LAPTOP (HDMI + USB touch cable)
-  Double-click  start-kiosk.bat  instead of start-tv.bat.
-  It starts everything and opens Chrome locked in full screen, so
-  visitors cannot reach the address bar or close the page.
-  To get out of it at the end of the day: press Alt+F4 on the laptop
-  keyboard, then close the black window.
-  (If the touch TV has its own web browser, use Step 3 instead.)
+TOUCH TV WITH OPS COMPUTER (or a laptop with HDMI + USB touch cable)
+  ** EASIEST WAY - no laptop, no Wi-Fi, no Python needed **
+  1. Copy the whole MEDSCOPE folder (with videos, images, fonts) onto
+     the OPS computer, e.g. onto its Desktop, using a USB stick.
+  2. Double-click  start-kiosk.bat  in that folder.
+  3. The screen opens locked in full screen. Touch works straight away.
+  To get out at the end of the day: press Alt+F4 on a keyboard.
+
+  On the OPS computer, ALSO do this once:
+  - Settings > System > Power: set "Screen" and "Sleep" to NEVER.
+  - Start automatically when the TV is switched on:
+    right-click start-kiosk.bat > Show more options > Create shortcut.
+    Press Windows key + R, type  shell:startup  and press Enter.
+    Move the new shortcut into the folder that opens.
+  - Turn off Windows notifications during the exhibition
+    (Settings > System > Notifications > Off).
+
   Tip: tie the remote or clicker to the stand with a string, and put a
   small card next to it:  "Press 1 English  2 தமிழ்  3 සිංහල".
 
