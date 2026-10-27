@@ -81,7 +81,12 @@ STEP 3 - OPEN IT ON THE SMART TV
   1. On the TV remote, open the "Internet" / "Web Browser" app.
   2. Type the address from Step 1, for example
         http://192.168.1.25:8000
-  3. Make the browser full screen (usually in the browser menu).
+  3. TOUCH THE SCREEN ONCE (or press OK on the remote). The page then
+     switches to full screen by itself. If the address bar ever comes
+     back, just touch the screen again.
+     (If your TV browser does not allow this, use the browser menu's
+     "Full screen" option, or the free Android app "Fully Kiosk Browser"
+     with your address as its Start URL.)
   4. In the TV settings, turn OFF: screen saver, "Eco" / power saving,
      "Auto power off" and "No signal standby". The page asks the
      screen to stay awake, but many TVs ignore that, so this is

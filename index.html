@@ -662,7 +662,8 @@ var SETTINGS = {
   readingCharsPerSecond: { en: 13, ta: 15, si: 15 },
   sideCardVideos: true,      // false = side cards show a colour card instead of video
                              //         (use this if the TV becomes slow or jerky)
-  cursorHideSeconds: 3
+  cursorHideSeconds: 3,
+  autoFullscreen: true       // the first touch, click or remote button makes the page full screen
 };
 
 /* =====================================================================
@@ -1164,6 +1165,24 @@ var SETTINGS = {
     if (document.visibilityState === "visible") { requestWakeLock(); }
   }, false);
   document.addEventListener("click", requestWakeLock, false);
+
+  /* ---------- full screen on the first touch / click / button press ---------- */
+  // Browsers only allow full screen after someone touches the screen or
+  // presses a button, so we ask then (and again if it was left).
+  function goFullscreen() {
+    if (!SETTINGS.autoFullscreen) { return; }
+    if (document.fullscreenElement || document.webkitFullscreenElement) { return; }
+    var d = document.documentElement;
+    var f = d.requestFullscreen || d.webkitRequestFullscreen || d.webkitRequestFullScreen;
+    if (!f) { return; }
+    try {
+      var r = f.call(d);
+      if (r && r["catch"]) { r["catch"](function () {}); }
+    } catch (e) {}
+  }
+  document.addEventListener("click", goFullscreen, false);
+  document.addEventListener("touchend", goFullscreen, false);
+  document.addEventListener("keydown", goFullscreen, false);
 
   /* ---------- start ---------- */
   menuVideo.muted = true;
